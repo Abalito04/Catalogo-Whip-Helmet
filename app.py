@@ -90,6 +90,37 @@ def agregar_casco():
     
     return render_template('agregar_casco.html')
 
+@app.route('/admin')
+def admin_panel():
+    """Panel de administración"""
+    cascos = Casco.query.order_by(Casco.fecha_agregado.desc()).all()
+    return render_template('admin_panel.html', cascos=cascos)
+
+@app.route('/admin/editar/<int:id>', methods=['GET', 'POST'])
+def editar_casco(id):
+    """Editar un casco existente"""
+    casco = Casco.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        casco.nombre_modelo = request.form['nombre_modelo']
+        casco.marca = request.form['marca']
+        casco.tipo = request.form.get('tipo', '')
+        casco.condicion = request.form['condicion']
+        casco.precio = float(request.form['precio'])
+        casco.descripcion = request.form.get('descripcion', '')
+        casco.talle = request.form.get('talle', '')
+        casco.color = request.form.get('color', '')
+        casco.imagen_principal = request.form.get('imagen_principal', '')
+        casco.disponible = request.form.get('disponible') == 'on'
+        casco.destacado = request.form.get('destacado') == 'on'
+        
+        db.session.commit()
+        flash('Casco actualizado exitosamente!', 'success')
+        return redirect(url_for('admin_panel'))
+    
+    return render_template('editar_casco.html', casco=casco)
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
 
