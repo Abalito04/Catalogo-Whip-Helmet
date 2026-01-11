@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}{{ casco.marca }} {{ casco.nombre_modelo }} - WHIP-HELMETS{% endblock %}
+
+{% block content %}
+
+<div class="producto-detalle">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{{ url_for('index') }}">← Volver al catálogo</a>
+    </nav>
+
+    <div class="producto-contenido">
+        <!-- Galería de imágenes -->
+        <div class="producto-galeria">
+            <div class="imagen-principal" onclick="abrirLightbox()">
+                {% if casco.imagen_principal %}
+                <img id="imagen-main" src="{{ url_for('static', filename='images/cascos/' + casco.imagen_principal) }}" 
+                     alt="{{ casco.marca }} {{ casco.nombre_modelo }}"
+                     style="cursor: zoom-in;">
+                {% else %}
+                <div class="sin-imagen-grande">Sin imagen disponible</div>
+                {% endif %}
+            </div>
+
+            <!-- Lightbox con navegación -->
+            <div id="lightbox" class="lightbox" onclick="cerrarLightbox(event)">
+                <span class="lightbox-close" onclick="cerrarLightbox(event)">&times;</span>
+                
+                <!-- Botón anterior -->
+                <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); cambiarImagenLightbox(-1)">
+                    ❮
+                </button>
+                
+                <!-- Imagen -->
+                <img class="lightbox-content" id="lightbox-img">
+                
+                <!-- Botón siguiente -->
+                <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); cambiarImagenLightbox(1)">
+                    ❯
+                </button>
+                
+                <!-- Contador de imágenes -->
+                <div class="lightbox-counter" id="lightbox-counter"></div>
+            </div>
+
+            {% if casco.imagenes_adicionales %}
+            <div class="imagenes-thumbnails">
+                <!-- Thumbnail de la imagen principal -->
+                <img class="thumbnail active" 
+                     src="{{ url_for('static', filename='images/cascos/' + casco.imagen_principal) }}"
+                     onclick="cambiarImagen(this.src)"
+                     alt="Frontal">
+                
+                <!-- Thumbnails de imágenes adicionales -->
+                {% for img in casco.get_imagenes_lista() %}
+                <img class="thumbnail" 
+                     src="{{ url_for('static', filename='images/cascos/' + img) }}"
+                     onclick="cambiarImagen(this.src)"
+                     alt="Vista adicional">
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- BOTÓN VER PUBLICACIÓN - ACÁ EN LA GALERÍA -->
+            {% if casco.instagram_url %}
+            <a href="{{ casco.instagram_url }}" target="_blank" class="btn-instagram-post-galeria">
+                📸 Ver publicación en Instagram
+            </a>
+            {% endif %}
+
+        </div>
+
+        <!-- Información del producto -->
+        <div class="producto-info">
+            <!-- Badges -->
+            <div class="badges-container">
+                <span class="badge-grande badge-{{ casco.condicion }}">
+                    {{ casco.condicion|upper }}
+                </span>
+                {% if casco.destacado %}
+                <span class="badge-grande badge-destacado">⭐ DESTACADO</span>
+                {% endif %}
+            </div>
+
+            <!-- Título y marca -->
+            <h1>{{ casco.marca }}</h1>
+            <h2 class="modelo-titulo">{{ casco.nombre_modelo }}</h2>
+
+            <!-- Precio -->
+            <p class="precio-grande">${{ "%.2f"|format(casco.precio) }}</p>
+
+            <!-- Especificaciones -->
+            <div class="especificaciones">
+                <h3>Especificaciones</h3>
+                <ul>
+                    {% if casco.tipo %}
+                    <li><strong>Tipo:</strong> {{ casco.tipo|capitalize }}</li>
+                    {% endif %}
+                    
+                    {% if casco.talle %}
+                    <li><strong>Talle:</strong> {{ casco.talle }}</li>
+                    {% endif %}
+                    
+                    {% if casco.color %}
+                    <li><strong>Color:</strong> {{ casco.color }}</li>
+                    {% endif %}
+                    
+                    <li><strong>Condición:</strong> {{ casco.condicion|capitalize }}</li>
+                    <li><strong>Disponibilidad:</strong> 
+                        {% if casco.disponible %}
+                        <span class="disponible">✓ Disponible</span>
+                        {% else %}
+                        <span class="no-disponible">✗ No disponible</span>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Descripción -->
+            {% if casco.descripcion %}
+            <div class="descripcion">
+                <h3>Descripción</h3>
+                <p>{{ casco.descripcion }}</p>
+            </div>
+            {% endif %}
+
+            <!-- BOTONES SECUNDARIOS - ACÁ EN PRODUCTO-INFO -->
+            <div class="botones-info">
+                <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="btn-instagram">
+                    📸 Visitar nuestro Instagram
+                </a>
+                
+                <a href="https://wa.me/542954544001?text=Hola!%20Me%20interesa%20el%20casco%20{{ casco.marca }}%20{{ casco.nombre_modelo }}" 
+                   target="_blank" class="btn-whatsapp">
+                    💬 Consultar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/producto.js') }}"></script>
+{% endblock %}
+

@@ -1,0 +1,127 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Catálogo - WHIP-HELMETS{% endblock %}
+
+{% block content %}
+<div class="catalogo-wrapper">
+    <!-- Sidebar de Filtros -->
+        <aside class="filtros" id="filtros-sidebar">
+        <!-- Header móvil con botón cerrar -->
+        <div class="filtros-header-mobile">
+            <h3>Filtrar por:</h3>
+            <button id="btn-cerrar-filtros" class="btn-cerrar-filtros">&times;</button>
+        </div>
+        
+        <!-- Título desktop (se oculta en móvil) -->
+        <h3 class="filtros-titulo-desktop">Filtrar por:</h3>
+        
+        <div class="filtro-grupo">
+            <h4>Condición</h4>
+            <a href="{{ url_for('index', condicion='nuevo', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}" 
+               class="filtro-btn {% if filtro_actual.condicion == 'nuevo' %}active{% endif %}">
+                🟢 Nuevos
+            </a>
+            <a href="{{ url_for('index', condicion='usado', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}" 
+               class="filtro-btn {% if filtro_actual.condicion == 'usado' %}active{% endif %}">
+                🟡 Usados
+            </a>
+            <a href="{{ url_for('index', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}" 
+               class="filtro-btn">
+                Todos
+            </a>
+        </div>
+    
+        {% if tipos %}
+        <div class="filtro-grupo">
+            <h4>Tipo</h4>
+            {% for tipo in tipos %}
+            <a href="{{ url_for('index', condicion=filtro_actual.condicion, tipo=tipo, marca=filtro_actual.marca) }}" 
+               class="filtro-btn {% if filtro_actual.tipo == tipo %}active{% endif %}">
+                {{ tipo|capitalize }}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    
+        {% if marcas %}
+        <div class="filtro-grupo">
+            <h4>Marca</h4>
+            {% for marca in marcas %}
+            <a href="{{ url_for('index', condicion=filtro_actual.condicion, tipo=filtro_actual.tipo, marca=marca) }}" 
+               class="filtro-btn {% if filtro_actual.marca == marca %}active{% endif %}">
+                {{ marca }}
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    
+        {% if filtro_actual.condicion or filtro_actual.tipo or filtro_actual.marca %}
+        <a href="{{ url_for('index') }}" class="limpiar-filtros">Limpiar filtros</a>
+        {% endif %}
+    </aside>
+
+
+    <!-- Grid de Cascos -->
+    <section class="cascos-grid">
+        <!-- Header con botón filtros SOLO para móvil -->
+        <div class="filtros-mobile-header">
+            <h2>Nuestro Catálogo</h2>
+            <button id="btn-abrir-filtros" class="btn-filtros-mobile">
+                🔍 Filtros
+            </button>
+        </div>
+        
+        {% if cascos %}
+        <div class="grid">
+
+            {% for casco in cascos %}
+            <article class="casco-card">
+                <a href="{{ url_for('producto', id=casco.id) }}">
+                    <!-- Badge de condición -->
+                    <span class="badge badge-{{ casco.condicion }}">
+                        {{ casco.condicion|upper }}
+                    </span>
+                    
+                    {% if casco.destacado %}
+                    <span class="badge badge-destacado">⭐ DESTACADO</span>
+                    {% endif %}
+                    
+                    <!-- Imagen -->
+                    <div class="casco-imagen">
+                        {% if casco.imagen_principal %}
+                        <img src="{{ url_for('static', filename='images/cascos/' + casco.imagen_principal) }}" 
+                             alt="{{ casco.marca }} {{ casco.nombre_modelo }}">
+                        {% else %}
+                        <div class="sin-imagen">Sin imagen</div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Info -->
+                    <div class="casco-info">
+                        <h3>{{ casco.marca }}</h3>
+                        <p class="modelo">{{ casco.nombre_modelo }}</p>
+                        
+                        {% if casco.talle %}
+                        <p class="talle">Talle: {{ casco.talle }}</p>
+                        {% endif %}
+                        
+                        {% if casco.color %}
+                        <p class="color">Color: {{ casco.color }}</p>
+                        {% endif %}
+                        
+                        <p class="precio">${{ "%.2f"|format(casco.precio) }}</p>
+                    </div>
+                </a>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="sin-resultados">
+            <p>No se encontraron cascos con los filtros seleccionados.</p>
+            <a href="{{ url_for('index') }}" class="btn">Ver todos los productos</a>
+        </div>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
