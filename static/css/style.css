@@ -884,11 +884,15 @@ footer a {
         height: 100vh;
         background: #1f1f1f;
         z-index: 9999;
-        overflow-y: auto;
+        overflow-y: auto !important;      /* Forzar scroll vertical */
+        overflow-x: hidden;               /* Sin scroll horizontal */
+        -webkit-overflow-scrolling: touch; /* Scroll suave en iOS */
         transition: left 0.3s ease;
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
         padding: 20px;
+        padding-bottom: 50px;              /* Espacio extra abajo */
     }
+
     
     .filtros.abierto {
         left: 0;
