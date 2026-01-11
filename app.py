@@ -4,7 +4,14 @@ from models import db, Casco
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'tu-clave-secreta-aqui-cambiar-en-produccion'
+app.config['SECRET_KEY'] = 'cc71d03d236850d52e73d76371be47576120b2d29b8f849f99f06fbc63bf284c'
+
+# Configurar Cloudinary
+cloudinary.config(
+    cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.getenv('CLOUDINARY_API_KEY'),
+    api_secret=os.getenv('CLOUDINARY_API_SECRET')
+)
 
 # Railway usa postgres:// pero SQLAlchemy necesita postgresql://
 database_url = os.getenv('DATABASE_URL', 'sqlite:///cascos.db')
@@ -67,8 +74,19 @@ def producto(id):
 
 @app.route('/admin/agregar', methods=['GET', 'POST'])
 def agregar_casco():
-    """Formulario para agregar cascos (versión básica)"""
+    """Formulario para agregar cascos"""
     if request.method == 'POST':
+        # Subir imagen a Cloudinary si existe
+        imagen_url = ''
+        if 'imagen' in request.files:
+            file = request.files['imagen']
+            if file.filename != '':
+                upload_result = cloudinary.uploader.upload(
+                    file,
+                    folder="whip-helmets"
+                )
+                imagen_url = upload_result['secure_url']
+        
         nuevo_casco = Casco(
             nombre_modelo=request.form['nombre_modelo'],
             marca=request.form['marca'],
@@ -78,7 +96,7 @@ def agregar_casco():
             descripcion=request.form.get('descripcion', ''),
             talle=request.form.get('talle', ''),
             color=request.form.get('color', ''),
-            imagen_principal=request.form.get('imagen_principal', ''),
+            imagen_principal=imagen_url,
             disponible=True,
             destacado=request.form.get('destacado') == 'on'
         )
@@ -86,9 +104,10 @@ def agregar_casco():
         db.session.add(nuevo_casco)
         db.session.commit()
         flash('Casco agregado exitosamente!', 'success')
-        return redirect(url_for('index'))
+        return redirect(url_for('admin_panel'))
     
     return render_template('agregar_casco.html')
+
 
 @app.route('/admin')
 def admin_panel():
