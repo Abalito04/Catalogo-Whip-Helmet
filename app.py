@@ -78,16 +78,30 @@ def producto(id):
 def agregar_casco():
     """Formulario para agregar cascos"""
     if request.method == 'POST':
-        # Subir imagen a Cloudinary si existe
-        imagen_url = ''
-        if 'imagen' in request.files:
-            file = request.files['imagen']
+        # Subir imagen principal
+        imagen_principal_url = ''
+        if 'imagen_principal' in request.files:
+            file = request.files['imagen_principal']
             if file.filename != '':
                 upload_result = cloudinary.uploader.upload(
                     file,
                     folder="whip-helmets"
                 )
-                imagen_url = upload_result['secure_url']
+                imagen_principal_url = upload_result['secure_url']
+        
+        # Subir imágenes adicionales
+        imagenes_adicionales = []
+        if 'imagenes_adicionales' in request.files:
+            files = request.files.getlist('imagenes_adicionales')
+            for file in files:
+                if file.filename != '':
+                    upload_result = cloudinary.uploader.upload(
+                        file,
+                        folder="whip-helmets"
+                    )
+                    imagenes_adicionales.append(upload_result['secure_url'])
+        
+        imagenes_adicionales_str = ','.join(imagenes_adicionales) if imagenes_adicionales else ''
         
         nuevo_casco = Casco(
             nombre_modelo=request.form['nombre_modelo'],
@@ -98,7 +112,8 @@ def agregar_casco():
             descripcion=request.form.get('descripcion', ''),
             talle=request.form.get('talle', ''),
             color=request.form.get('color', ''),
-            imagen_principal=imagen_url,
+            imagen_principal=imagen_principal_url,
+            imagenes_adicionales=imagenes_adicionales_str,
             disponible=True,
             destacado=request.form.get('destacado') == 'on'
         )
@@ -109,7 +124,6 @@ def agregar_casco():
         return redirect(url_for('admin_panel'))
     
     return render_template('agregar_casco.html')
-
 
 @app.route('/admin')
 def admin_panel():
@@ -123,6 +137,40 @@ def editar_casco(id):
     casco = Casco.query.get_or_404(id)
     
     if request.method == 'POST':
+        # Actualizar imagen principal si se subió una nueva
+        if 'imagen_principal' in request.files:
+            file = request.files['imagen_principal']
+            if file.filename != '':
+                upload_result = cloudinary.uploader.upload(
+                    file,
+                    folder="whip-helmets"
+                )
+                casco.imagen_principal = upload_result['secure_url']
+        
+        # Actualizar imágenes adicionales si se subieron
+        if 'imagenes_adicionales' in request.files:
+            files = request.files.getlist('imagenes_adicionales')
+            imagenes_nuevas = []
+            for file in files:
+                if file.filename != '':
+                    upload_result = cloudinary.uploader.upload(
+                        file,
+                        folder="whip-helmets"
+                    )
+                    imagenes_nuevas.append(upload_result['secure_url'])
+            
+            if imagenes_nuevas:
+                # Combinar con imágenes existentes o reemplazar
+                if request.form.get('mantener_imagenes') == 'on':
+                    # Agregar a las existentes
+                    existentes = casco.imagenes_adicionales.split(',') if casco.imagenes_adicionales else []
+                    todas = existentes + imagenes_nuevas
+                    casco.imagenes_adicionales = ','.join(todas)
+                else:
+                    # Reemplazar todas
+                    casco.imagenes_adicionales = ','.join(imagenes_nuevas)
+        
+        # Actualizar resto de campos
         casco.nombre_modelo = request.form['nombre_modelo']
         casco.marca = request.form['marca']
         casco.tipo = request.form.get('tipo', '')
@@ -131,7 +179,6 @@ def editar_casco(id):
         casco.descripcion = request.form.get('descripcion', '')
         casco.talle = request.form.get('talle', '')
         casco.color = request.form.get('color', '')
-        casco.imagen_principal = request.form.get('imagen_principal', '')
         casco.disponible = request.form.get('disponible') == 'on'
         casco.destacado = request.form.get('destacado') == 'on'
         
@@ -140,7 +187,6 @@ def editar_casco(id):
         return redirect(url_for('admin_panel'))
     
     return render_template('editar_casco.html', casco=casco)
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
