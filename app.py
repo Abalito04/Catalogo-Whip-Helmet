@@ -1,12 +1,29 @@
 # app.py
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 from models import db, Casco
 import os
 import cloudinary
 import cloudinary.uploader
+from functools import wraps
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'cc71d03d236850d52e73d76371be47576120b2d29b8f849f99f06fbc63bf284c'
+
+# Configurar Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message = 'Necesitás iniciar sesión para acceder.'
+
+# Usuario simple (sin base de datos)
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
 
 # Configurar Cloudinary
 cloudinary.config(
@@ -75,6 +92,7 @@ def producto(id):
     return render_template('producto.html', casco=casco)
 
 @app.route('/admin/agregar', methods=['GET', 'POST'])
+@login_required
 def agregar_casco():
     """Formulario para agregar cascos"""
     if request.method == 'POST':
@@ -126,12 +144,15 @@ def agregar_casco():
     return render_template('agregar_casco.html')
 
 @app.route('/admin')
+
+@login_required
 def admin_panel():
     """Panel de administración"""
     cascos = Casco.query.order_by(Casco.fecha_agregado.desc()).all()
     return render_template('admin_panel.html', cascos=cascos)
 
 @app.route('/admin/editar/<int:id>', methods=['GET', 'POST'])
+@login_required
 def editar_casco(id):
     """Editar un casco existente"""
     casco = Casco.query.get_or_404(id)
@@ -187,6 +208,35 @@ def editar_casco(id):
         return redirect(url_for('admin_panel'))
     
     return render_template('editar_casco.html', casco=casco)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Login de admin"""
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        admin_user = os.getenv('ADMIN_USERNAME', 'admin')
+        admin_pass = os.getenv('ADMIN_PASSWORD', 'admin')
+        
+        if username == admin_user and password == admin_pass:
+            user = User(id=1)
+            login_user(user)
+            flash('¡Bienvenido!', 'success')
+            return redirect(url_for('admin_panel'))
+        else:
+            flash('Usuario o contraseña incorrectos', 'error')
+    
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    """Cerrar sesión"""
+    logout_user()
+    flash('Sesión cerrada', 'success')
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
