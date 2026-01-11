@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel Admin - WHIP-HELMETS{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px; margin: 50px auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1 style="color: #ffd700;">Panel de Administración</h1>
+        <a href="{{ url_for('agregar_casco') }}" style="background: #ffd700; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+            ➕ Agregar Casco
+        </a>
+    </div>
+
+    <div style="background: white; border-radius: 8px; padding: 20px; overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f5f5f5; text-align: left;">
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Marca</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Modelo</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Condición</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Precio</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Talle</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Estado</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for casco in cascos %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px;">{{ casco.marca }}</td>
+                    <td style="padding: 12px;">{{ casco.nombre_modelo }}</td>
+                    <td style="padding: 12px;">
+                        <span style="padding: 4px 8px; border-radius: 4px; font-size: 12px; {% if casco.condicion == 'nuevo' %}background: #28a745; color: white;{% else %}background: #ffc107; color: #333;{% endif %}">
+                            {{ casco.condicion.upper() }}
+                        </span>
+                    </td>
+                    <td style="padding: 12px; font-weight: bold;">${{ "%.2f"|format(casco.precio) }}</td>
+                    <td style="padding: 12px;">{{ casco.talle or '-' }}</td>
+                    <td style="padding: 12px;">
+                        {% if casco.disponible %}
+                        <span style="color: #28a745; font-weight: bold;">✓ Disponible</span>
+                        {% else %}
+                        <span style="color: #dc3545;">✗ No disponible</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 12px;">
+                        <a href="{{ url_for('editar_casco', id=casco.id) }}" style="background: #007bff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px;">
+                            ✏️ Editar
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
