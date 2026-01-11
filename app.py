@@ -5,8 +5,15 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'tu-clave-secreta-aqui-cambiar-en-produccion'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///cascos.db')
+
+# Railway usa postgres:// pero SQLAlchemy necesita postgresql://
+database_url = os.getenv('DATABASE_URL', 'sqlite:///cascos.db')
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 # Inicializar base de datos
 db.init_app(app)
