@@ -132,6 +132,7 @@ def agregar_casco():
             color=request.form.get('color', ''),
             imagen_principal=imagen_principal_url,
             imagenes_adicionales=imagenes_adicionales_str,
+            instagram_url=request.form.get('instagram_url', ''),
             disponible=True,
             destacado=request.form.get('destacado') == 'on'
         )
@@ -200,6 +201,7 @@ def editar_casco(id):
         casco.descripcion = request.form.get('descripcion', '')
         casco.talle = request.form.get('talle', '')
         casco.color = request.form.get('color', '')
+        casco.instagram_url = request.form.get('instagram_url', '') 
         casco.disponible = request.form.get('disponible') == 'on'
         casco.destacado = request.form.get('destacado') == 'on'
         
