@@ -46,17 +46,12 @@
         {% block content %}{% endblock %}
     </main>
 
+
     <footer>
-        <div class="container">
-            <p>&copy; 2026 WHIP-HELMETS - Todos los derechos reservados</p>
-            <p>Contacto: <a href="https://instagram.com/whip.helmets" target="_blank">@whip.helmets</a></p>
-        </div>
-    </footer>
-    <footer>
-    <p>&copy; 2025 WHIP-HELMETS. Todos los derechos reservados.</p>
+    <p>&copy; 2026 WHIP-HELMETS. Todos los derechos reservados.</p>
     <p>
-        <a href="https://instagram.com/tuusuario" style="color: #ffd700;">Instagram</a> | 
-        <a href="https://wa.me/tunumero" style="color: #ffd700;">WhatsApp</a>
+        <a href="https://instagram.com/whip.helmets" style="color: #ffd700;">Instagram</a> | 
+        <a href="https://wa.me/542954544001" style="color: #ffd700;">WhatsApp</a>
         {% if current_user.is_authenticated %}
         | <a href="{{ url_for('admin_panel') }}" style="color: #ffd700;">Panel Admin</a>
         | <a href="{{ url_for('logout') }}" style="color: #ffd700;">Cerrar Sesión</a>
