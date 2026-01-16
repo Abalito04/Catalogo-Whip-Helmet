@@ -5,26 +5,30 @@
 {% block content %}
 <div class="container" style="max-width: 800px; margin: 50px auto;">
     <h1 style="color: #ffd700; margin-bottom: 30px;">Agregar Nuevo Casco</h1>
-    
-        <form method="POST" enctype="multipart/form-data" style="background: white; padding: 30px; border-radius: 8px;">
+
+    <form method="POST" enctype="multipart/form-data" style="background: white; padding: 30px; border-radius: 8px;">
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Nombre del Modelo *</label>
-            <input type="text" name="nombre_modelo" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="nombre_modelo" required
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Marca *</label>
-            <input type="text" name="marca" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="marca" required
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Tipo</label>
-            <input type="text" name="tipo" placeholder="Ej: Integral, Abierto, Modular" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="tipo" placeholder="Ej: Integral, Abierto, Modular"
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Condición *</label>
-            <select name="condicion" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <select name="condicion" required
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
                 <option value="nuevo">Nuevo</option>
                 <option value="usado">Usado</option>
             </select>
@@ -32,34 +36,40 @@
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Precio *</label>
-            <input type="number" name="precio" step="0.01" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="number" name="precio" step="0.01" required
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Talle</label>
-            <input type="text" name="talle" placeholder="Ej: S, M, L, XL" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="talle" placeholder="Ej: S, M, L, XL"
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Color</label>
-            <input type="text" name="color" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="text" name="color"
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Imagen principal *</label>
-            <input type="file" name="imagen_principal" accept="image/*" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="file" name="imagen_principal" accept="image/*" required
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
             <small style="color: #666;">Imagen principal del casco</small>
         </div>
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Imágenes adicionales</label>
-            <input type="file" name="imagenes_adicionales" accept="image/*" multiple style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="file" name="imagenes_adicionales" accept="image/*" multiple
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
             <small style="color: #666;">Podés seleccionar múltiples imágenes (mantené Ctrl o Cmd presionado)</small>
         </div>
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Descripción</label>
-            <textarea name="descripcion" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
+            <textarea name="descripcion" rows="4"
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
         </div>
 
         <div style="margin-bottom: 20px;">
@@ -71,16 +81,20 @@
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Link de Instagram (opcional)</label>
-            <input type="url" name="instagram_url" placeholder="https://instagram.com/p/ABC123..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+            <input type="url" name="instagram_url" placeholder="https://instagram.com/p/ABC123..."
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+
 
         </div>
 
 
         <div style="display: flex; gap: 15px;">
-            <button type="submit" style="flex: 1; padding: 12px; background: #ffd700; color: #000; border: none; border-radius: 4px; font-weight: bold; font-size: 16px; cursor: pointer;">
+            <button type="submit"
+                style="flex: 1; padding: 12px; background: #ffd700; color: #000; border: none; border-radius: 4px; font-weight: bold; font-size: 16px; cursor: pointer;">
                 Agregar Casco
             </button>
-            <a href="{{ url_for('index') }}" style="flex: 1; padding: 12px; background: #666; color: white; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 16px;">
+            <a href="{{ url_for('index') }}"
+                style="flex: 1; padding: 12px; background: #666; color: white; text-align: center; text-decoration: none; border-radius: 4px; font-weight: bold; font-size: 16px;">
                 Cancelar
             </a>
         </div>
