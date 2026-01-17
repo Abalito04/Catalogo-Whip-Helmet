@@ -19,28 +19,27 @@
                 {% else %}
                 <div class="sin-imagen-grande">Sin imagen disponible</div>
                 {% endif %}
-            </div>
+        </div>
 
-            <!-- Lightbox con navegación -->
-            <div id="lightbox" class="lightbox" onclick="cerrarLightbox(event)">
-                <span class="lightbox-close" onclick="cerrarLightbox(event)">&times;</span>
-                
-                <!-- Botón anterior -->
-                <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); cambiarImagenLightbox(-1)">
-                    ❮
-                </button>
-                
-                <!-- Imagen -->
-                <img class="lightbox-content" id="lightbox-img">
-                
-                <!-- Botón siguiente -->
-                <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); cambiarImagenLightbox(1)">
-                    ❯
-                </button>
-                
-                <!-- Contador de imágenes -->
-                <div class="lightbox-counter" id="lightbox-counter"></div>
-            </div>
+        <!-- Lightbox con navegación -->
+        <div id="lightbox" class="lightbox" onclick="cerrarLightbox(event)">
+            <span class="lightbox-close" onclick="cerrarLightbox(event)">&times;</span>
+            
+            <!-- Botón anterior -->
+            <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); cambiarImagenLightbox(-1)">
+                ❮
+            </button>
+            <!-- Imagen -->
+            <img class="lightbox-content" id="lightbox-img">
+            
+            <!-- Botón siguiente -->
+            <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); cambiarImagenLightbox(1)">
+                ❯
+            </button>
+            
+            <!-- Contador de imágenes -->
+            <div class="lightbox-counter" id="lightbox-counter"></div>
+        </div>
 
             {% if casco.imagenes_adicionales %}
             <div class="imagenes-thumbnails">

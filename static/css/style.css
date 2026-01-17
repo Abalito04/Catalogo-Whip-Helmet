@@ -670,7 +670,7 @@ main {
    ========================================== */
 
 .lightbox {
-    display: none;
+    display: none !important;
     position: fixed;
     z-index: 9999;
     padding: 40px;
@@ -1054,4 +1054,11 @@ footer a {
     .cascos-grid h2 {
         font-size: 32px;
     }
+}
+#lightbox {
+    display: none !important;
+}
+
+#lightbox.show {
+    display: flex !important;
 }

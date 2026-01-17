@@ -33,12 +33,13 @@ function abrirLightbox() {
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
     
-    // Encontrar índice de la imagen actual
     imagenActualIndex = imagenesGaleria.findIndex(imgSrc => imgSrc === img.src);
     if (imagenActualIndex === -1) imagenActualIndex = 0;
     
     lightboxImg.src = imagenesGaleria[imagenActualIndex];
     actualizarContador();
+    
+    lightbox.classList.add('show'); // ← CAMBIAR ESTO
     lightbox.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
@@ -46,9 +47,11 @@ function abrirLightbox() {
 function cerrarLightbox(event) {
     if (event) event.stopPropagation();
     const lightbox = document.getElementById('lightbox');
+    lightbox.classList.remove('show'); // ← CAMBIAR ESTO
     lightbox.style.display = 'none';
     document.body.style.overflow = 'auto';
 }
+
 
 function cambiarImagenLightbox(direccion) {
     imagenActualIndex += direccion;
