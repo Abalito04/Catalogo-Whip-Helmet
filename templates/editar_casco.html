@@ -12,9 +12,9 @@
         <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
             <h3 style="color: #333; margin-bottom: 15px;">📸 Imagen Principal</h3>
             
-            {% if casco.imagen_principal_url %}
+            {% if casco.imagen_principal %}
                 <div style="position: relative; display: inline-block; margin: 10px 10px 10px 0;">
-                    <img src="{{ casco.imagen_principal_url }}" style="max-width: 200px; border: 3px solid #ddd; border-radius: 8px; display: block;">
+                    <img src="{{ casco.imagen_principal }}" style="max-width: 200px; border: 3px solid #ddd; border-radius: 8px; display: block;">
                     <form method="POST" action="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='principal', indice=0) }}" style="display: inline;">
                         <button type="submit" onclick="return confirm('¿Eliminar imagen principal?')" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">✕</button>
                     </form>
@@ -33,9 +33,9 @@
         <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
             <h3 style="color: #333; margin-bottom: 15px;">🖼️ Imágenes Adicionales</h3>
             
-            {% if casco.imagenes_adicionales_url %}
+            {% if casco.imagenes_adicionales %}
                 <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
-                    {% for imagen in casco.imagenes_adicionales_url.split(',') %}
+                    {% for imagen in casco.imagenes_adicionales.split(',') %}
                         <div style="position: relative; display: inline-block;">
                             <img src="{{ imagen }}" style="max-width: 150px; border: 3px solid #ddd; border-radius: 8px; display: block;">
                             <form method="POST" action="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='adicional', indice=loop.index0) }}" style="display: inline;">
