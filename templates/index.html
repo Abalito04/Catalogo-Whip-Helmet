@@ -90,8 +90,7 @@
                     <!-- Imagen -->
                     <div class="casco-imagen">
                         {% if casco.imagen_principal %}
-                        <img src="{{ url_for('static', filename='images/cascos/' + casco.imagen_principal) }}" 
-                             alt="{{ casco.marca }} {{ casco.nombre_modelo }}">
+                        <img src="{{ casco.imagen_principal }}"
                         {% else %}
                         <div class="sin-imagen">Sin imagen</div>
                         {% endif %}
