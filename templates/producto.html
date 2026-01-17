@@ -10,36 +10,60 @@
         <a href="{{ url_for('index') }}">← Volver al catálogo</a>
     </nav>
 
-    <div class="producto-contenido">
-        <!-- Galería de imágenes -->
+            <!-- Galería de imágenes - REESTRUCTURADA -->
         <div class="producto-galeria">
+            <!-- Imagen Principal -->
             <div class="imagen-principal" onclick="abrirLightbox()">
                 {% if casco.imagen_principal %}
                 <img id="imagen-main" src="{{ casco.imagen_principal }}" 
+                     alt="{{ casco.marca }} {{ casco.nombre_modelo }}">
                 {% else %}
                 <div class="sin-imagen-grande">Sin imagen disponible</div>
                 {% endif %}
+            </div>
+
+            <!-- Miniaturas -->
+            {% if casco.imagenes_adicionales %}
+            <div class="imagenes-thumbnails">
+                <img class="thumbnail active" 
+                     src="{{ casco.imagen_principal }}"
+                     onclick="cambiarImagen(this.src)"
+                     alt="Vista 1">
+                
+                {% for img in casco.get_imagenes_lista() %}
+                <img class="thumbnail" 
+                     src="{{ img }}"
+                     onclick="cambiarImagen(this.src)"
+                     alt="Vista {{ loop.index + 1 }}">
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- Botón Instagram -->
+            {% if casco.instagram_url %}
+            <a href="{{ casco.instagram_url }}" target="_blank" class="btn-instagram-post-galeria">
+                📸 Ver publicación en Instagram
+            </a>
+            {% endif %}
         </div>
 
-        <!-- Lightbox con navegación -->
-        <div id="lightbox" class="lightbox" onclick="cerrarLightbox(event)">
-            <span class="lightbox-close" onclick="cerrarLightbox(event)">&times;</span>
-            
-            <!-- Botón anterior -->
-            <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); cambiarImagenLightbox(-1)">
-                ❮
-            </button>
-            <!-- Imagen -->
-            <img class="lightbox-content" id="lightbox-img">
-            
-            <!-- Botón siguiente -->
-            <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); cambiarImagenLightbox(1)">
-                ❯
-            </button>
-            
-            <!-- Contador de imágenes -->
-            <div class="lightbox-counter" id="lightbox-counter"></div>
-        </div>
+<!-- Lightbox FUERA de la galería -->
+<div id="lightbox" class="lightbox" onclick="cerrarLightbox(event)">
+    <span class="lightbox-close" onclick="cerrarLightbox(event)">&times;</span>
+    
+    <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); cambiarImagenLightbox(-1)">
+        ❮
+    </button>
+    
+    <img class="lightbox-content" id="lightbox-img" alt="Imagen ampliada">
+    
+    <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); cambiarImagenLightbox(1)">
+        ❯
+    </button>
+    
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+</div>
+
 
             {% if casco.imagenes_adicionales %}
             <div class="imagenes-thumbnails">

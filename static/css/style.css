@@ -436,8 +436,6 @@ main {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    position: relative;
-    z-index: 1;
 }
 
 .imagen-principal {
@@ -448,62 +446,45 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
     padding: 20px;
     border: 2px solid #e0e0e0;
-    cursor: pointer;
-    position: relative;
-    z-index: 2;
+    cursor: zoom-in;
+    transition: border-color 0.3s;
+}
+
+.imagen-principal:hover {
+    border-color: #ffd700;
 }
 
 .imagen-principal img {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-}
-
-.imagen-principal::after {
-    content: '🔍';
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(0,0,0,0.7);
-    color: white;
-    padding: 8px 12px;
-    border-radius: 50%;
-    font-size: 18px;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
-.imagen-principal:hover::after {
-    opacity: 1;
+    display: block;
 }
 
 .sin-imagen-grande {
     color: #999;
     font-size: 18px;
+    text-align: center;
 }
 
 .imagenes-thumbnails {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
-    position: relative;
-    z-index: 1;
-    margin-top: 0;
 }
 
 .thumbnail {
     width: 100%;
-    height: 120px;
+    height: 110px;
     object-fit: contain;
     background: #f8f8f8;
     border: 2px solid #ddd;
     border-radius: 6px;
     cursor: pointer;
     transition: all 0.3s;
-    padding: 10px;
+    padding: 8px;
 }
 
 .thumbnail:hover {
@@ -603,7 +584,7 @@ main {
     display: block;
     width: 100%;
     padding: 16px 24px;
-    margin-top: 15px;
+    margin-top: 5px;
     text-align: center;
     text-decoration: none;
     border-radius: 10px;
@@ -613,14 +594,13 @@ main {
     background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%);
     color: white;
     box-shadow: 0 4px 15px rgba(131, 58, 180, 0.5);
-    position: relative;
-    z-index: 1;
 }
 
 .btn-instagram-post-galeria:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(131, 58, 180, 0.7);
 }
+
 
 /* Botones en producto-info */
 .botones-info {
@@ -669,8 +649,9 @@ main {
    LIGHTBOX
    ========================================== */
 
+
 .lightbox {
-    display: none !important;
+    display: none;
     position: fixed;
     z-index: 9999;
     padding: 40px;
@@ -689,18 +670,11 @@ main {
     max-height: 85vh;
     object-fit: contain;
     animation: zoom 0.3s ease;
-    user-select: none;
 }
 
 @keyframes zoom {
-    from {
-        transform: scale(0.8);
-        opacity: 0;
-    }
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 .lightbox-close {
@@ -710,9 +684,9 @@ main {
     color: #ffd700;
     font-size: 50px;
     font-weight: bold;
-    transition: 0.3s;
     cursor: pointer;
     z-index: 10000;
+    transition: all 0.3s;
 }
 
 .lightbox-close:hover {
@@ -741,13 +715,8 @@ main {
     transform: translateY(-50%) scale(1.1);
 }
 
-.lightbox-prev {
-    left: 20px;
-}
-
-.lightbox-next {
-    right: 20px;
-}
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
 
 .lightbox-counter {
     position: absolute;
