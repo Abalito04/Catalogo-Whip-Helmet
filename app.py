@@ -214,7 +214,7 @@ def editar_casco(casco_id):
         
         db.session.commit()
         flash('Casco actualizado correctamente', 'success')
-        return redirect(url_for('admin'))
+        return redirect(url_for('admin_panel'))
     
     return render_template('editar_casco.html', casco=casco)
 
