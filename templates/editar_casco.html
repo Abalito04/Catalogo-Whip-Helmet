@@ -57,7 +57,7 @@
         <!-- Datos del Casco -->
         <div style="margin-bottom: 20px;">
             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Nombre del Casco *</label>
-            <input type="text" name="nombre" value="{{ casco.nombre }}" required placeholder="Ej: Casco Integral Racing" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+            <input type="text" name="nombre_modelo" value="{{ casco.nombre }}" required placeholder="Ej: Casco Integral Racing" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
         </div>
         
         <div style="margin-bottom: 20px;">
@@ -86,7 +86,52 @@
                 <span style="font-weight: 600; color: #333;">✅ Disponible para la venta</span>
             </label>
         </div>
+
+        <div style="margin-bottom: 30px;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" name="destacado" id="destacado" {% if casco.destacado %}checked{% endif %} style="width: 20px; height: 20px; cursor: pointer;">
+                <span style="font-weight: 600; color: #333;">⭐ Marcar como destacado</span>
+            </label>
+        </div>
+    
+        <div style="margin-bottom: 30px;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" name="destacado" id="destacado" {% if casco.destacado %}checked{% endif %} style="width: 20px; height: 20px; cursor: pointer;">
+                <span style="font-weight: 600; color: #333;">⭐ Marcar como destacado</span>
+            </label>
+        </div>
+
         
+<!-- Agregar campos faltantes -->
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Tipo *</label>
+                <input type="text" name="tipo" value="{{ casco.tipo or '' }}" placeholder="Ej: Integral, Abierto" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Condición *</label>
+                <select name="condicion" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+                    <option value="Nuevo" {% if casco.condicion == 'Nuevo' %}selected{% endif %}>Nuevo</option>
+                    <option value="Usado" {% if casco.condicion == 'Usado' %}selected{% endif %}>Usado</option>
+                </select>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Talle</label>
+                <input type="text" name="talle" value="{{ casco.talle or '' }}" placeholder="Ej: L, M, S" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Color</label>
+                <input type="text" name="color" value="{{ casco.color or '' }}" placeholder="Ej: Negro, Rojo" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" name="destacado" id="destacado" {% if casco.destacado %}checked{% endif %} style="width: 20px; height: 20px; cursor: pointer;">
+                    <span style="font-weight: 600; color: #333;">⭐ Marcar como destacado</span>
+                </label>
+        </div>
+
         <div style="display: flex; gap: 15px;">
             <button type="submit" style="background: #28a745; color: white; padding: 14px 35px; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: 600;">💾 Guardar Cambios</button>
             <a href="{{ url_for('admin_panel') }}" style="background: #6c757d; color: white; padding: 14px 35px; border: none; border-radius: 8px; text-decoration: none; font-size: 16px; font-weight: 600; display: inline-block;">❌ Cancelar</a>

@@ -175,20 +175,20 @@ def editar_casco(casco_id):
                 print(f"📸 Subiendo nueva imagen principal...")
                 try:
                     # Eliminar la anterior de Cloudinary
-                    if casco.imagen_principal_url:
-                        old_public_id = casco.imagen_principal_url.split('/')[-1].split('.')[0]
+                    if casco.imagen_principal:
+                        old_public_id = casco.imagen_principal.split('/')[-1].split('.')[0]
                         cloudinary.uploader.destroy(f"whip-helmets/{old_public_id}")
                     
                     # Subir nueva
                     upload_result = cloudinary.uploader.upload(file, folder="whip-helmets", timeout=60)
-                    casco.imagen_principal_url = upload_result['secure_url']
-                    print(f"✅ Nueva imagen principal: {casco.imagen_principal_url}")
+                    casco.imagen_principal = upload_result['secure_url']
+                    print(f"✅ Nueva imagen principal: {casco.imagen_principal}")
                 except Exception as e:
                     print(f"❌ Error: {e}")
                     flash(f'Error subiendo imagen: {str(e)}', 'error')
         
         # AGREGAR imágenes adicionales (no reemplazar)
-        imagenes_adicionales = casco.imagenes_adicionales_url.split(',') if casco.imagenes_adicionales_url else []
+        imagenes_adicionales = casco.imagenes_adicionales.split(',') if casco.imagenes_adicionales else []
         
         if 'imagenes_adicionales' in request.files:
             files = request.files.getlist('imagenes_adicionales')
@@ -202,22 +202,26 @@ def editar_casco(casco_id):
                     except Exception as e:
                         print(f"❌ Error: {e}")
         
-        casco.imagenes_adicionales_url = ','.join(imagenes_adicionales) if imagenes_adicionales else None
+        casco.imagenes_adicionales = ','.join(imagenes_adicionales) if imagenes_adicionales else None
         
         # Actualizar resto de campos
-        casco.nombre = request.form['nombre']
+        casco.nombre_modelo = request.form['nombre_modelo']
         casco.marca = request.form['marca']
+        casco.tipo = request.form.get('tipo', '')
+        casco.condicion = request.form.get('condicion', 'Nuevo')
         casco.precio = float(request.form['precio'])
         casco.descripcion = request.form.get('descripcion', '')
+        casco.talle = request.form.get('talle', '')
+        casco.color = request.form.get('color', '')
         casco.instagram_url = request.form.get('instagram_url', '')
         casco.disponible = 'disponible' in request.form
+        casco.destacado = 'destacado' in request.form  # 👈 AGREGADO
         
         db.session.commit()
         flash('Casco actualizado correctamente', 'success')
         return redirect(url_for('admin_panel'))
     
     return render_template('editar_casco.html', casco=casco)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -256,14 +260,14 @@ def eliminar_imagen(casco_id, tipo, indice):
     try:
         if tipo == 'principal':
             # Eliminar de Cloudinary
-            if casco.imagen_principal_url:
-                public_id = casco.imagen_principal_url.split('/')[-1].split('.')[0]
+            if casco.imagen_principal:
+                public_id = casco.imagen_principal.split('/')[-1].split('.')[0]
                 cloudinary.uploader.destroy(f"whip-helmets/{public_id}")
-            casco.imagen_principal_url = None
+            casco.imagen_principal = None
             flash('Imagen principal eliminada', 'success')
             
         elif tipo == 'adicional':
-            imagenes = casco.imagenes_adicionales_url.split(',') if casco.imagenes_adicionales_url else []
+            imagenes = casco.imagenes_adicionales.split(',') if casco.imagenes_adicionales else []
             if 0 <= indice < len(imagenes):
                 # Eliminar de Cloudinary
                 imagen_url = imagenes[indice]
@@ -271,7 +275,7 @@ def eliminar_imagen(casco_id, tipo, indice):
                 cloudinary.uploader.destroy(f"whip-helmets/{public_id}")
                 # Eliminar de la lista
                 imagenes.pop(indice)
-                casco.imagenes_adicionales_url = ','.join(imagenes) if imagenes else None
+                casco.imagenes_adicionales = ','.join(imagenes) if imagenes else None
                 flash('Imagen adicional eliminada', 'success')
         
         db.session.commit()
@@ -281,8 +285,6 @@ def eliminar_imagen(casco_id, tipo, indice):
         flash(f'Error eliminando imagen: {str(e)}', 'error')
     
     return redirect(url_for('editar_casco', casco_id=casco_id))
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
