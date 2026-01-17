@@ -15,9 +15,7 @@
         <div class="producto-galeria">
             <div class="imagen-principal" onclick="abrirLightbox()">
                 {% if casco.imagen_principal %}
-                <img id="imagen-main" src="{{ url_for('static', filename='images/cascos/' + casco.imagen_principal) }}" 
-                     alt="{{ casco.marca }} {{ casco.nombre_modelo }}"
-                     style="cursor: zoom-in;">
+                <img id="imagen-main" src="{{ casco.imagen_principal }}" 
                 {% else %}
                 <div class="sin-imagen-grande">Sin imagen disponible</div>
                 {% endif %}
@@ -48,14 +46,14 @@
             <div class="imagenes-thumbnails">
                 <!-- Thumbnail de la imagen principal -->
                 <img class="thumbnail active" 
-                     src="{{ url_for('static', filename='images/cascos/' + casco.imagen_principal) }}"
+                     src="{{ casco.imagen_principal }}"
                      onclick="cambiarImagen(this.src)"
                      alt="Frontal">
                 
                 <!-- Thumbnails de imágenes adicionales -->
                 {% for img in casco.get_imagenes_lista() %}
                 <img class="thumbnail" 
-                     src="{{ url_for('static', filename='images/cascos/' + img) }}"
+                     src="{{ img }}"
                      onclick="cambiarImagen(this.src)"
                      alt="Vista adicional">
                 {% endfor %}
