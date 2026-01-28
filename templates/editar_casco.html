@@ -15,9 +15,11 @@
             {% if casco.imagen_principal %}
                 <div style="position: relative; display: inline-block; margin: 10px 10px 10px 0;">
                     <img src="{{ casco.imagen_principal }}" style="max-width: 200px; border: 3px solid #ddd; border-radius: 8px; display: block;">
-                    <form method="POST" action="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='principal', indice=0) }}" style="display: inline;">
-                        <button type="submit" onclick="return confirm('¿Eliminar imagen principal?')" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">✕</button>
-                    </form>
+                    <button type="button" 
+                            onclick="eliminarImagen('{{ url_for(&quot;eliminar_imagen&quot;, casco_id=casco.id, tipo=&quot;principal&quot;, indice=0) }}')" 
+                            style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                        ✕
+                    </button>
                 </div>
             {% else %}
                 <p style="color: #999; font-style: italic;">Sin imagen principal</p>
@@ -38,9 +40,11 @@
                     {% for imagen in casco.imagenes_adicionales.split(',') %}
                         <div style="position: relative; display: inline-block;">
                             <img src="{{ imagen }}" style="max-width: 150px; border: 3px solid #ddd; border-radius: 8px; display: block;">
-                            <form method="POST" action="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='adicional', indice=loop.index0) }}" style="display: inline;">
-                                <button type="submit" onclick="return confirm('¿Eliminar esta imagen?')" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">✕</button>
-                            </form>
+                            <button type="button" 
+                                    onclick="eliminarImagen('{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='adicional', indice=loop.index0) }}')" 
+                                    style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">
+                                ✕
+                            </button>
                         </div>
                     {% endfor %}
                 </div>
@@ -62,7 +66,7 @@
         
         <div style="margin-bottom: 20px;">
             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Marca *</label>
-            <input type="text" name="marca" value="{{ casco.nombre_modelo }}" required placeholder="Ej: Hawk, LS2, AGV" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+            <input type="text" name="marca" value="{{ casco.marca }}" required placeholder="Ej: Hawk, LS2, AGV" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
         </div>
         
         <div style="margin-bottom: 20px;">
@@ -79,6 +83,29 @@
             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Link de Instagram</label>
             <input type="url" name="instagram_url" value="{{ casco.instagram_url or '' }}" placeholder="https://instagram.com/p/ABC123..." style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
         </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Tipo *</label>
+            <input type="text" name="tipo" value="{{ casco.tipo or '' }}" placeholder="Ej: Integral, Abierto" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Condición *</label>
+            <select name="condicion" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+                <option value="Nuevo" {% if casco.condicion == 'Nuevo' %}selected{% endif %}>Nuevo</option>
+                <option value="Usado" {% if casco.condicion == 'Usado' %}selected{% endif %}>Usado</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Talle</label>
+            <input type="text" name="talle" value="{{ casco.talle or '' }}" placeholder="Ej: L, M, S" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Color</label>
+            <input type="text" name="color" value="{{ casco.color or '' }}" placeholder="Ej: Negro, Rojo" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
+        </div>
         
         <div style="margin-bottom: 30px;">
             <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
@@ -86,35 +113,12 @@
                 <span style="font-weight: 600; color: #333;">✅ Disponible para la venta</span>
             </label>
         </div>
-        
-<!-- Agregar campos faltantes -->
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Tipo *</label>
-                <input type="text" name="tipo" value="{{ casco.tipo or '' }}" placeholder="Ej: Integral, Abierto" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Condición *</label>
-                <select name="condicion" required style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
-                    <option value="Nuevo" {% if casco.condicion == 'Nuevo' %}selected{% endif %}>Nuevo</option>
-                    <option value="Usado" {% if casco.condicion == 'Usado' %}selected{% endif %}>Usado</option>
-                </select>
-            </div>
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Talle</label>
-                <input type="text" name="talle" value="{{ casco.talle or '' }}" placeholder="Ej: L, M, S" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Color</label>
-                <input type="text" name="color" value="{{ casco.color or '' }}" placeholder="Ej: Negro, Rojo" style="width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 15px; box-sizing: border-box;">
-            </div>
 
-            <div style="margin-bottom: 30px;">
-                <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" name="destacado" id="destacado" {% if casco.destacado %}checked{% endif %} style="width: 20px; height: 20px; cursor: pointer;">
-                    <span style="font-weight: 600; color: #333;">⭐ Marcar como destacado</span>
-                </label>
+        <div style="margin-bottom: 30px;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                <input type="checkbox" name="destacado" id="destacado" {% if casco.destacado %}checked{% endif %} style="width: 20px; height: 20px; cursor: pointer;">
+                <span style="font-weight: 600; color: #333;">⭐ Marcar como destacado</span>
+            </label>
         </div>
 
         <div style="display: flex; gap: 15px;">
@@ -123,4 +127,19 @@
         </div>
     </form>
 </div>
+
+<script>
+function eliminarImagen(url) {
+    if (confirm('¿Estás seguro de que querés eliminar esta imagen?')) {
+        // Crear un formulario temporal
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = url;
+        form.style.display = 'none';
+        document.body.appendChild(form);
+        form.submit();
+    }
+}
+</script>
+
 {% endblock %}
