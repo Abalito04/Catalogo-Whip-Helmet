@@ -259,20 +259,32 @@ def eliminar_imagen(casco_id, tipo, indice):
     
     try:
         if tipo == 'principal':
-            # Eliminar de Cloudinary
             if casco.imagen_principal:
-                public_id = casco.imagen_principal.split('/')[-1].split('.')[0]
-                cloudinary.uploader.destroy(f"whip-helmets/{public_id}")
-            casco.imagen_principal = None
-            flash('Imagen principal eliminada', 'success')
+                url_parts = casco.imagen_principal.split('/')
+                upload_idx = url_parts.index('upload')
+                public_id_parts = url_parts[upload_idx + 2:]
+                # Unir y quitar extensión
+                public_id = '/'.join(public_id_parts).rsplit('.', 1)[0]
+                
+                print(f"🗑️ Eliminando imagen principal: {public_id}")
+                cloudinary.uploader.destroy(public_id)
+                casco.imagen_principal = None
+                flash('Imagen principal eliminada', 'success')
             
         elif tipo == 'adicional':
             imagenes = casco.imagenes_adicionales.split(',') if casco.imagenes_adicionales else []
             if 0 <= indice < len(imagenes):
-                # Eliminar de Cloudinary
                 imagen_url = imagenes[indice]
-                public_id = imagen_url.split('/')[-1].split('.')[0]
-                cloudinary.uploader.destroy(f"whip-helmets/{public_id}")
+                
+                # Extraer public_id correctamente
+                url_parts = imagen_url.split('/')
+                upload_idx = url_parts.index('upload')
+                public_id_parts = url_parts[upload_idx + 2:]
+                public_id = '/'.join(public_id_parts).rsplit('.', 1)[0]
+                
+                print(f"🗑️ Eliminando imagen adicional: {public_id}")
+                cloudinary.uploader.destroy(public_id)
+                
                 # Eliminar de la lista
                 imagenes.pop(indice)
                 casco.imagenes_adicionales = ','.join(imagenes) if imagenes else None
