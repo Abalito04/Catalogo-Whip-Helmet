@@ -254,49 +254,84 @@ def logout():
 @app.route('/admin/eliminar-imagen/<int:casco_id>/<tipo>/<int:indice>', methods=['POST'])
 @login_required
 def eliminar_imagen(casco_id, tipo, indice):
-    """Eliminar una imagen específica de un casco"""
+    """Eliminar una imagen específica de un casco - maneja slots vacíos"""
     casco = Casco.query.get_or_404(casco_id)
     
     try:
         if tipo == 'principal':
             if casco.imagen_principal:
+                # Extraer public_id correctamente
                 url_parts = casco.imagen_principal.split('/')
                 upload_idx = url_parts.index('upload')
-                public_id_parts = url_parts[upload_idx + 2:]
-                # Unir y quitar extensión
+                public_id_parts = url_parts[upload_idx + 2:]  # Saltar "upload" y "vXXXX"
                 public_id = '/'.join(public_id_parts).rsplit('.', 1)[0]
                 
                 print(f"🗑️ Eliminando imagen principal: {public_id}")
-                cloudinary.uploader.destroy(public_id)
+                result = cloudinary.uploader.destroy(public_id)
+                print(f"📊 Resultado Cloudinary: {result}")
+                
                 casco.imagen_principal = None
                 flash('Imagen principal eliminada', 'success')
-            
+        
         elif tipo == 'adicional':
-            imagenes = casco.imagenes_adicionales.split(',') if casco.imagenes_adicionales else []
-            if 0 <= indice < len(imagenes):
-                imagen_url = imagenes[indice]
-                
-                # Extraer public_id correctamente
+            # Dividir y normalizar lista (sacar espacios y vacíos para índices válidos)
+            imagenes_raw = casco.imagenes_adicionales.split(',') if casco.imagenes_adicionales else []
+            
+            # Si el índice está fuera de rango, no hacer nada
+            if not (0 <= indice < len(imagenes_raw)):
+                flash('Índice inválido', 'error')
+                return redirect(url_for('editar_casco', casco_id=casco_id))
+            
+            imagen_url = imagenes_raw[indice].strip()
+            
+            # Si es un slot vacío, simplemente eliminarlo
+            if not imagen_url:
+                print("🗑️ Eliminando slot vacío")
+                imagenes_raw.pop(indice)
+                # Reconstruir lista limpia
+                imagenes_limpias = [img.strip() for img in imagenes_raw if img.strip()]
+                casco.imagenes_adicionales = ','.join(imagenes_limpias) if imagenes_limpias else None
+                db.session.commit()
+                flash('Slot vacío eliminado', 'success')
+                return redirect(url_for('editar_casco', casco_id=casco_id))
+            
+            # Si tiene URL, intentar borrar de Cloudinary
+            if '/upload/' in imagen_url:
                 url_parts = imagen_url.split('/')
                 upload_idx = url_parts.index('upload')
                 public_id_parts = url_parts[upload_idx + 2:]
                 public_id = '/'.join(public_id_parts).rsplit('.', 1)[0]
                 
                 print(f"🗑️ Eliminando imagen adicional: {public_id}")
-                cloudinary.uploader.destroy(public_id)
+                result = cloudinary.uploader.destroy(public_id)
+                print(f"📊 Resultado Cloudinary: {result}")
                 
-                # Eliminar de la lista
-                imagenes.pop(indice)
-                casco.imagenes_adicionales = ','.join(imagenes) if imagenes else None
+                # Eliminar de la lista original
+                imagenes_raw.pop(indice)
+                # Reconstruir lista limpia
+                imagenes_limpias = [img.strip() for img in imagenes_raw if img.strip()]
+                casco.imagenes_adicionales = ','.join(imagenes_limpias) if imagenes_limpias else None
+                db.session.commit()
                 flash('Imagen adicional eliminada', 'success')
+            else:
+                # URL inválida pero válida para limpiar
+                print("🗑️ Limpiando URL inválida:", imagen_url)
+                imagenes_raw.pop(indice)
+                imagenes_limpias = [img.strip() for img in imagenes_raw if img.strip()]
+                casco.imagenes_adicionales = ','.join(imagenes_limpias) if imagenes_limpias else None
+                db.session.commit()
+                flash('Imagen inválida limpiada', 'success')
         
         db.session.commit()
         
     except Exception as e:
         print(f"❌ Error eliminando imagen: {e}")
-        flash(f'Error eliminando imagen: {str(e)}', 'error')
+        import traceback
+        traceback.print_exc()
+        flash(f'Error: {str(e)}', 'error')
     
     return redirect(url_for('editar_casco', casco_id=casco_id))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

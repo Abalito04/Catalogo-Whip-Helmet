@@ -33,7 +33,7 @@
     
     {% if casco.imagenes_adicionales %}
         <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
-            {% for imagen in casco.imagenes_adicionales.split(',') %}
+            {% for imagen in casco.imagenes_adicionales.split(',') if imagen.strip() %}
                 <div style="position: relative; display: inline-block;">
                     <img src="{{ imagen }}" style="max-width: 150px; border: 3px solid #ddd; border-radius: 8px; display: block;">
                     <button type="button" class="btn-eliminar-imagen" data-url="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='adicional', indice=loop.index0) }}" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">✕</button>
