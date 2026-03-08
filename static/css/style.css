@@ -272,15 +272,36 @@ main {
     position: relative;
 }
 
+.casco-info {
+    padding: 15px;
+    background: #2a2a2a;
+}
+
+/* Nombre del casco - dorado */
 .casco-info h3 {
-    color: #ffffff;
+    color: #ffd700;
     font-size: 18px;
     margin-bottom: 5px;
 }
 
-.casco-info {
-    padding: 15px;
-    background: #2a2a2a;
+/* Marca/subtítulo - dorado más suave */
+.marca {
+    color: #f0c040;
+    font-size: 14px;
+}
+
+/* Precio - verde queda bien, pero si querés también podés usar dorado */
+.precio {
+    color: #4cd964;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+/* Cualquier texto descriptivo dentro de la tarjeta */
+.casco-info p,
+.casco-info span {
+    color: #d0d0d0;
 }
 
 .casco-card:hover {
