@@ -921,7 +921,8 @@ footer a {
     }
     
     .casco-imagen {
-        height: 200px;
+        height: 45vw;
+        max-height: 250px;
     }
     
     .precio {
@@ -1011,6 +1012,12 @@ footer a {
 @media (max-width: 480px) {
     .grid {
         grid-template-columns: 1fr;
+    }
+
+    .casco-imagen {
+        height: 75vw;
+        max-height: 340px;
+        padding: 10px;
     }
     
     .logo img {
