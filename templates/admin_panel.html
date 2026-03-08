@@ -30,7 +30,7 @@
                 <tr style="border-bottom: 1px solid #eee;">
                     <td style="padding: 8px;">
                         {% if casco.imagen_principal %}
-                        <img src="{{ casco.imagen_principal }}" 
+                        <img src="{{ casco.imagen_principal }}"
                              alt="{{ casco.marca }}"
                              style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 2px solid #ddd;">
                         {% else %}
@@ -62,9 +62,18 @@
                         {% endif %}
                     </td>
                     <td style="padding: 12px;">
-                        <a href="{{ url_for('editar_casco', casco_id=casco.id) }}" style="background: #007bff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px;">
-                            ✏️ Editar
-                        </a>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <a href="{{ url_for('editar_casco', casco_id=casco.id) }}"
+                               style="background: #007bff; color: white; padding: 6px 12px; text-decoration: none; border-radius: 4px; font-size: 14px;">
+                                ✏️ Editar
+                            </a>
+                            <button class="btn-eliminar-casco"
+                                    data-url="{{ url_for('eliminar_casco', casco_id=casco.id) }}"
+                                    data-nombre="{{ casco.marca }} {{ casco.nombre_modelo }}"
+                                    style="background: #dc3545; color: white; padding: 6px 12px; border: none; border-radius: 4px; font-size: 14px; cursor: pointer;">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
@@ -124,6 +133,19 @@ document.querySelectorAll('.sortable').forEach(function(th) {
         });
 
         filas.forEach(fila => tbody.appendChild(fila));
+    });
+});
+
+document.querySelectorAll('.btn-eliminar-casco').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        const nombre = this.getAttribute('data-nombre');
+        if (confirm('⚠️ ¿Estás seguro de eliminar el casco "' + nombre + '"?\n\nEsta acción no se puede deshacer.')) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = this.getAttribute('data-url');
+            document.body.appendChild(form);
+            form.submit();
+        }
     });
 });
 </script>

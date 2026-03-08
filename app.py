@@ -332,6 +332,45 @@ def eliminar_imagen(casco_id, tipo, indice):
     
     return redirect(url_for('editar_casco', casco_id=casco_id))
 
+@app.route('/admin/eliminar-casco/<int:casco_id>', methods=['POST'])
+@login_required
+def eliminar_casco(casco_id):
+    """Eliminar un casco completo con sus imágenes de Cloudinary"""
+    casco = Casco.query.get_or_404(casco_id)
+    
+    try:
+        # Eliminar imagen principal de Cloudinary
+        if casco.imagen_principal and '/upload/' in casco.imagen_principal:
+            after_upload = casco.imagen_principal.split('/upload/')[1]
+            if after_upload.startswith('v'):
+                after_upload = after_upload.split('/', 1)[1]
+            public_id = after_upload.rsplit('.', 1)[0]
+            cloudinary.uploader.destroy(public_id)
+            print(f"🗑️ Imagen principal eliminada: {public_id}")
+
+        # Eliminar imágenes adicionales de Cloudinary
+        if casco.imagenes_adicionales:
+            for img_url in casco.imagenes_adicionales.split(','):
+                img_url = img_url.strip()
+                if img_url and '/upload/' in img_url:
+                    after_upload = img_url.split('/upload/')[1]
+                    if after_upload.startswith('v'):
+                        after_upload = after_upload.split('/', 1)[1]
+                    public_id = after_upload.rsplit('.', 1)[0]
+                    cloudinary.uploader.destroy(public_id)
+                    print(f"🗑️ Imagen adicional eliminada: {public_id}")
+
+        # Eliminar de la base de datos
+        db.session.delete(casco)
+        db.session.commit()
+        flash(f'Casco "{casco.marca} {casco.nombre_modelo}" eliminado correctamente', 'success')
+
+    except Exception as e:
+        print(f"❌ Error eliminando casco: {e}")
+        flash(f'Error al eliminar: {str(e)}', 'error')
+
+    return redirect(url_for('admin_panel'))
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
