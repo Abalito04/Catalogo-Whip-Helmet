@@ -48,6 +48,18 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+# Pre-cargar modelo de rembg al iniciar
+def precargar_modelo_rembg():
+    try:
+        print("⏳ Pre-cargando modelo rembg...")
+        from rembg import new_session
+        new_session("u2net")
+        print("✅ Modelo rembg listo")
+    except Exception as e:
+        print(f"⚠️ No se pudo pre-cargar rembg: {e}")
+
+precargar_modelo_rembg()
+
 
 # -------------------------------------------------------
 # FUNCIÓN AUXILIAR: Remover fondo con rembg
