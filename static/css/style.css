@@ -1001,6 +1001,31 @@ footer a {
         font-size: 14px;
         bottom: 15px;
     }
+        /* Producto - mobile */
+    .producto-detalle {
+        padding: 15px;
+    }
+
+    .producto-contenido {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .imagen-principal {
+        height: 320px;
+        padding: 10px;
+    }
+
+    .imagenes-thumbnails {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .thumbnail {
+        height: 75px;
+        padding: 4px;
+    }
+
 }
 
 /* ==========================================
@@ -1023,6 +1048,20 @@ footer a {
     .cascos-grid h2 {
         font-size: 32px;
     }
+        /* Producto - pantallas chicas */
+    .imagen-principal {
+        height: 280px;
+        padding: 8px;
+    }
+
+    .imagenes-thumbnails {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .thumbnail {
+        height: 80px;
+    }
+
 }
 #lightbox {
     display: none !important;
