@@ -8,49 +8,54 @@
     
     <form method="POST" enctype="multipart/form-data">
         
- <!-- Imagen Principal -->
-<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-    <h3 style="color: #333; margin-bottom: 15px;">📸 Imagen Principal</h3>
-    
-    {% if casco.imagen_principal %}
-        <div style="position: relative; display: inline-block; margin: 10px 10px 10px 0;">
-            <img src="{{ casco.imagen_principal }}" style="max-width: 200px; border: 3px solid #ddd; border-radius: 8px; display: block;">
-            <button type="button" class="btn-eliminar-imagen" data-url="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='principal', indice=0) }}" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">✕</button>
-        </div>
-    {% else %}
-        <p style="color: #999; font-style: italic;">Sin imagen principal</p>
-    {% endif %}
-    
-    <div style="margin-top: 15px;">
-        <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Cambiar imagen principal:</label>
-        <input type="file" name="imagen_principal" accept="image/*" style="padding: 10px; border: 2px dashed #007bff; border-radius: 8px; width: 100%; cursor: pointer; background: #f0f8ff;">
-    </div>
-</div>
-
-<!-- Imágenes Adicionales -->
-<div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
-    <h3 style="color: #333; margin-bottom: 15px;">🖼️ Imágenes Adicionales</h3>
-    
-    {% if casco.imagenes_adicionales %}
-        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
-            {% for imagen in casco.imagenes_adicionales.split(',') if imagen.strip() %}
-                <div style="position: relative; display: inline-block;">
-                    <img src="{{ imagen }}" style="max-width: 150px; border: 3px solid #ddd; border-radius: 8px; display: block;">
-                    <button type="button" class="btn-eliminar-imagen" data-url="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='adicional', indice=loop.index0) }}" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">✕</button>
+        <!-- Imagen Principal -->
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h3 style="color: #333; margin-bottom: 15px;">📸 Imagen Principal</h3>
+            
+            {% if casco.imagen_principal %}
+                <div style="position: relative; display: inline-block; margin: 10px 10px 10px 0;">
+                    <img src="{{ casco.imagen_principal }}" style="max-width: 200px; border: 3px solid #ddd; border-radius: 8px; display: block;">
+                    <button type="button" class="btn-eliminar-imagen" data-url="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='principal', indice=0) }}" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">✕</button>
                 </div>
-            {% endfor %}
+            {% else %}
+                <p style="color: #999; font-style: italic;">Sin imagen principal</p>
+            {% endif %}
+            
+            <div style="margin-top: 15px;">
+                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Cambiar imagen principal:</label>
+                <input type="file" name="imagen_principal" accept="image/*" style="padding: 10px; border: 2px dashed #007bff; border-radius: 8px; width: 100%; cursor: pointer; background: #f0f8ff;">
+                <!-- CHECKBOX REMBG -->
+                <label style="display: flex; align-items: center; gap: 8px; margin-top: 10px; cursor: pointer;">
+                    <input type="checkbox" name="remover_fondo" style="width: 18px; height: 18px;">
+                    <span style="font-weight: 600; color: #333;">🪄 Remover fondo automáticamente</span>
+                    <span style="color: #999; font-size: 13px;">(puede tardar ~20s la primera vez)</span>
+                </label>
+            </div>
         </div>
-    {% else %}
-        <p style="color: #999; font-style: italic;">Sin imágenes adicionales</p>
-    {% endif %}
-    
-    <div style="margin-top: 15px;">
-        <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Agregar más imágenes:</label>
-        <input type="file" name="imagenes_adicionales" accept="image/*" multiple style="padding: 10px; border: 2px dashed #007bff; border-radius: 8px; width: 100%; cursor: pointer; background: #f0f8ff;">
-    </div>
-</div>
-
         
+        <!-- Imágenes Adicionales -->
+        <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h3 style="color: #333; margin-bottom: 15px;">🖼️ Imágenes Adicionales</h3>
+            
+            {% if casco.imagenes_adicionales %}
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
+                    {% for imagen in casco.imagenes_adicionales.split(',') if imagen.strip() %}
+                        <div style="position: relative; display: inline-block;">
+                            <img src="{{ imagen }}" style="max-width: 150px; border: 3px solid #ddd; border-radius: 8px; display: block;">
+                            <button type="button" class="btn-eliminar-imagen" data-url="{{ url_for('eliminar_imagen', casco_id=casco.id, tipo='adicional', indice=loop.index0) }}" style="position: absolute; top: -8px; right: -8px; background: #dc3545; color: white; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 18px; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.2);">✕</button>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p style="color: #999; font-style: italic;">Sin imágenes adicionales</p>
+            {% endif %}
+            
+            <div style="margin-top: 15px;">
+                <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Agregar más imágenes:</label>
+                <input type="file" name="imagenes_adicionales" accept="image/*" multiple style="padding: 10px; border: 2px dashed #007bff; border-radius: 8px; width: 100%; cursor: pointer; background: #f0f8ff;">
+            </div>
+        </div>
+
         <!-- Datos del Casco -->
         <div style="margin-bottom: 20px;">
             <label style="display: block; font-weight: 600; color: #333; margin-bottom: 8px;">Nombre del Casco *</label>
@@ -122,7 +127,6 @@
 </div>
 
 <script>
-
 document.querySelectorAll('.btn-eliminar-imagen').forEach(function(btn) {
     btn.addEventListener('click', function() {
         if (confirm('¿Estás seguro de eliminar esta imagen?')) {
@@ -136,6 +140,5 @@ document.querySelectorAll('.btn-eliminar-imagen').forEach(function(btn) {
     });
 });
 </script>
-
 
 {% endblock %}
