@@ -264,12 +264,19 @@ main {
 }
 
 .casco-card {
-    background: white;
+    background: #1f1f1f;
+    border-top: 3px solid #ffd700;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     transition: transform 0.3s, box-shadow 0.3s;
     position: relative;
+}
+
+.casco-info h3 {
+    color: #f0f0f0;
+    font-size: 18px;
+    margin-bottom: 5px;
 }
 
 .casco-card:hover {
