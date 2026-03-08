@@ -272,38 +272,6 @@ main {
     position: relative;
 }
 
-.casco-info {
-    padding: 15px;
-    background: #2a2a2a;
-}
-
-/* Nombre del casco - dorado */
-.casco-info h3 {
-    color: #ffd700;
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-/* Marca/subtítulo - dorado más suave */
-.marca {
-    color: #f0c040;
-    font-size: 14px;
-}
-
-/* Precio - verde queda bien, pero si querés también podés usar dorado */
-.precio {
-    color: #4cd964;
-    font-size: 24px;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-/* Cualquier texto descriptivo dentro de la tarjeta */
-.casco-info p,
-.casco-info span {
-    color: #d0d0d0;
-}
-
 .casco-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 20px rgba(255, 215, 0, 0.3);
@@ -346,7 +314,7 @@ main {
 .casco-imagen {
     width: 100%;
     height: 350px;
-    background: #ffffff;
+    background: #2a2a2a;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -369,23 +337,24 @@ main {
 /* Info del casco */
 .casco-info {
     padding: 15px;
+    background: #2a2a2a;
 }
 
 .casco-info h3 {
-    color: #1a1a1a;
+    color: #ffd700;
     font-size: 18px;
     margin-bottom: 5px;
 }
 
 .modelo {
-    color: #666;
+    color: #f0c040;
     font-size: 14px;
     margin-bottom: 10px;
 }
 
 .talle, .color {
     font-size: 13px;
-    color: #888;
+    color: #d0d0d0;
     margin: 3px 0;
 }
 
@@ -952,8 +921,7 @@ footer a {
     }
     
     .casco-imagen {
-    height: 45vw;
-    max-height: 250px;
+        height: 200px;
     }
     
     .precio {
@@ -972,15 +940,7 @@ footer a {
     }
     
     .imagen-principal {
-    height: 80vw;
-    max-height: 500px;
-    padding: 8px;
-    }
-
-    .imagen-principal img {
-        max-width: 100%;
-        max-height: 100%;
-        object-fit: contain;
+        height: 300px;
     }
     
     .imagenes-thumbnails {
@@ -1042,31 +1002,6 @@ footer a {
         font-size: 14px;
         bottom: 15px;
     }
-        /* Producto - mobile */
-    .producto-detalle {
-        padding: 15px;
-    }
-
-    .producto-contenido {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .imagen-principal {
-        height: 320px;
-        padding: 10px;
-    }
-
-    .imagenes-thumbnails {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 8px;
-    }
-
-    .thumbnail {
-        height: 75px;
-        padding: 4px;
-    }
-
 }
 
 /* ==========================================
@@ -1077,42 +1012,19 @@ footer a {
     .grid {
         grid-template-columns: 1fr;
     }
-
+    
     .logo img {
         height: 100px !important;
     }
-
+    
     .logo span {
         font-size: 30px;
     }
-
+    
     .cascos-grid h2 {
         font-size: 32px;
     }
-
-    /* Tarjetas en columna única - imagen grande */
-    .casco-imagen {
-        height: 75vw;
-        max-height: 340px;
-        padding: 10px;
-    }
-
-    /* Vista producto */
-    .imagen-principal {
-        height: 80vw;
-        max-height: 380px;
-        padding: 8px;
-    }
-
-    .imagenes-thumbnails {
-        grid-template-columns: repeat(3, 1fr);
-    }
-
-    .thumbnail {
-        height: 22vw;
-    }
 }
-
 #lightbox {
     display: none !important;
 }
