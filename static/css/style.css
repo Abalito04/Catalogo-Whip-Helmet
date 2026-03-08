@@ -920,7 +920,8 @@ footer a {
     }
     
     .casco-imagen {
-        height: 200px;
+    height: 45vw;
+    max-height: 250px;
     }
     
     .precio {
@@ -1044,34 +1045,42 @@ footer a {
     .grid {
         grid-template-columns: 1fr;
     }
-    
+
     .logo img {
         height: 100px !important;
     }
-    
+
     .logo span {
         font-size: 30px;
     }
-    
+
     .cascos-grid h2 {
         font-size: 32px;
     }
-        /* Producto - pantallas chicas */
-    .imagen-principal {
-    height: 85vw;
-    max-height: 380px;
+
+    /* Tarjetas en columna única - imagen grande */
+    .casco-imagen {
+        height: 75vw;
+        max-height: 340px;
+        padding: 10px;
     }
-    
+
+    /* Vista producto */
+    .imagen-principal {
+        height: 80vw;
+        max-height: 380px;
+        padding: 8px;
+    }
+
     .imagenes-thumbnails {
         grid-template-columns: repeat(3, 1fr);
     }
-    
+
     .thumbnail {
         height: 22vw;
     }
-    
-    
-    }
+}
+
 #lightbox {
     display: none !important;
 }
