@@ -505,6 +505,13 @@ main {
     gap: 20px;
 }
 
+.producto-info h1 {
+    color: #ffd700;
+    font-size: 36px;
+    font-weight: 700;
+}
+
+
 .badges-container {
     display: flex;
     gap: 10px;
@@ -961,6 +968,7 @@ footer a {
     .producto-info h1 {
         font-size: 28px;
     }
+
     
     .modelo-titulo {
         font-size: 20px;
