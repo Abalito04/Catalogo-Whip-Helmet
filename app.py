@@ -382,6 +382,14 @@ def eliminar_casco(casco_id):
 
     return redirect(url_for('admin_panel'))
 
+@app.route('/setup-db')
+def setup_db():
+    with db.engine.connect() as conn:
+        conn.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS reservado BOOLEAN DEFAULT FALSE'))
+        conn.commit()
+    return 'Columna agregada OK!'
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
