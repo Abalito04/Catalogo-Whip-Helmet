@@ -67,7 +67,16 @@
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button type="submit" class="btn-rechazar" onclick="return confirm('¿Seguro que querés rechazar este pedido?')">✘ Rechazar</button>
                 </form>
+                <form action="{{ url_for('eliminar_pedido', pedido_id=pedido.id) }}" method="POST"
+                    onsubmit="return confirm('⚠️ ¿Eliminar el pedido #{{ pedido.id }}? Esta acción no se puede deshacer.              ')">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn-eliminar-pedido">
+                        🗑️ Eliminar
+                    </button>
+                </form>
+
             </div>
+            
             {% endif %}
         </div>
         {% endfor %}

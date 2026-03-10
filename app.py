@@ -507,6 +507,21 @@ def rechazar_pedido(pedido_id):
     flash(f'Pedido #{pedido.id} rechazado. Cascos disponibles nuevamente.', 'warning')
     return redirect(url_for('admin_pedidos'))
 
+@app.route('/admin/pedidos/<int:pedido_id>/eliminar', methods=['POST'])
+@login_required
+def eliminar_pedido(pedido_id):
+    pedido = Pedido.query.get_or_404(pedido_id)
+    
+    # Liberar los cascos reservados antes de eliminar
+    for item in pedido.items:
+        if pedido.estado == 'pendiente':
+            item.casco.reservado = False
+    
+    db.session.delete(pedido)
+    db.session.commit()
+    flash(f'Pedido #{pedido_id} eliminado.', 'success')
+    return redirect(url_for('admin_pedidos'))
+
 
 # -------------------------------------------------------
 # RUTAS ADMIN EXISTENTES
