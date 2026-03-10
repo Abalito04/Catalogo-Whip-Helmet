@@ -9,7 +9,7 @@ import cloudinary.uploader
 from functools import wraps
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'cc71d03d236850d52e73d76371be47576120b2d29b8f849f99f06fbc63bf284c'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'clave-local-de-desarrollo')
 
 login_manager = LoginManager()
 login_manager.init_app(app)
