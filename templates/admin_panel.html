@@ -14,7 +14,33 @@
         </a>
     </div>
 </div>
+<form method="GET" action="{{ url_for('admin_panel') }}" 
+      style="display: flex; gap: 10px; margin-bottom: 20px;">
+    <input type="text" name="q" value="{{ busqueda }}"
+           placeholder="🔍 Buscar por marca, modelo, color, tipo, talle..."
+           style="flex: 1; padding: 12px 16px; background: #1f1f1f; border: 1px solid #444;
+                  border-radius: 8px; color: #fff; font-size: 15px; font-family: 'Poppins', sans-serif;">
+    <button type="submit"
+            style="padding: 12px 24px; background: #ffd700; color: #000; border: none;
+                   border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer;
+                   font-family: 'Poppins', sans-serif;">
+        Buscar
+    </button>
+    {% if busqueda %}
+    <a href="{{ url_for('admin_panel') }}"
+       style="padding: 12px 20px; background: #3a3a3a; color: #d0d0d0; text-decoration: none;
+              border-radius: 8px; font-size: 15px; display: flex; align-items: center;">
+        ✕ Limpiar
+    </a>
+    {% endif %}
+</form>
 
+{% if busqueda %}
+<p style="color: #888; margin-bottom: 16px; font-size: 14px;">
+    {{ paginacion.total }} resultado{{ 's' if paginacion.total != 1 else '' }} 
+    para "<span style="color: #ffd700;">{{ busqueda }}</span>"
+</p>
+{% endif %}
 
     <div style="background: white; border-radius: 8px; padding: 20px; overflow-x: auto;">
         <table id="tabla-cascos" style="width: 100%; border-collapse: collapse;">
@@ -106,39 +132,48 @@
         </table>
 
         <!-- PAGINACIÓN -->
-        {% if paginacion.pages > 1 %}
-        <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 25px; flex-wrap: wrap;">
-
-            {% if paginacion.has_prev %}
-            <a href="{{ url_for('admin_panel', pagina=paginacion.prev_num) }}"
-               style="padding: 8px 14px; background: #007bff; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
-                ← Anterior
-            </a>
-            {% else %}
-            <span style="padding: 8px 14px; background: #e0e0e0; color: #999; border-radius: 6px;">← Anterior</span>
-            {% endif %}
-
-            {% for num in paginacion.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
-                {% if num %}
-                    {% if num == paginacion.page %}
-                    <span style="padding: 8px 14px; background: #ffd700; color: #000; border-radius: 6px; font-weight: bold;">{{ num }}</span>
-                    {% else %}
-                    <a href="{{ url_for('admin_panel', pagina=num) }}"
-                       style="padding: 8px 14px; background: #f5f5f5; color: #333; text-decoration: none; border-radius: 6px; border: 1px solid #ddd;">{{ num }}</a>
-                    {% endif %}
+                    {% if paginacion.pages > 1 %}
+            <div style="display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 25px;            flex-wrap: wrap;">
+            
+                {% if paginacion.has_prev %}
+                <a href="{{ url_for('admin_panel', pagina=paginacion.prev_num, q=busqueda, orden=orden,             dir=direccion) }}"
+                   style="padding: 8px 14px; background: #007bff; color: white; text-decoration: none;          border-radius: 6px; font-weight: bold;">
+                    ← Anterior
+                </a>
                 {% else %}
-                <span style="padding: 8px 4px; color: #999;">…</span>
+                <span style="padding: 8px 14px; background: #e0e0e0; color: #999; border-radius: 6px;">← Anterior</         span>
                 {% endif %}
-            {% endfor %}
-
-            {% if paginacion.has_next %}
-            <a href="{{ url_for('admin_panel', pagina=paginacion.next_num) }}"
-               style="padding: 8px 14px; background: #007bff; color: white; text-decoration: none; border-radius: 6px; font-weight: bold;">
-                Siguiente →
-            </a>
-            {% else %}
-            <span style="padding: 8px 14px; background: #e0e0e0; color: #999; border-radius: 6px;">Siguiente →</span>
+                
+                {% for num in paginacion.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+                    {% if num %}
+                        {% if num == paginacion.page %}
+                        <span style="padding: 8px 14px; background: #ffd700; color: #000; border-radius: 6px;           font-weight: bold;">{{ num }}</span>
+                        {% else %}
+                        <a href="{{ url_for('admin_panel', pagina=num, q=busqueda, orden=orden, dir=direccion) }}"
+                           style="padding: 8px 14px; background: #f5f5f5; color: #333; text-decoration: none;           border-radius: 6px; border: 1px solid #ddd;">
+                            {{ num }}
+                        </a>
+                        {% endif %}
+                    {% else %}
+                    <span style="padding: 8px 4px; color: #999;">…</span>
+                    {% endif %}
+                {% endfor %}
+                    
+                {% if paginacion.has_next %}
+                <a href="{{ url_for('admin_panel', pagina=paginacion.next_num, q=busqueda, orden=orden,             dir=direccion) }}"
+                   style="padding: 8px 14px; background: #007bff; color: white; text-decoration: none;          border-radius: 6px; font-weight: bold;">
+                    Siguiente →
+                </a>
+                {% else %}
+                <span style="padding: 8px 14px; background: #e0e0e0; color: #999; border-radius: 6px;">Siguiente →</            span>
+                {% endif %}
+                
+            </div>
+            <p style="text-align: center; color: #999; font-size: 13px; margin-top: 10px;">
+                Mostrando {{ cascos|length }} de {{ paginacion.total }} cascos — Página {{ paginacion.page }} de {{             paginacion.pages }}
+            </p>
             {% endif %}
+
 
         </div>
         <p style="text-align: center; color: #999; font-size: 13px; margin-top: 10px;">

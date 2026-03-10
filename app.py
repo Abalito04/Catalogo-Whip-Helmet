@@ -569,6 +569,7 @@ def admin_panel():
     pagina = request.args.get('pagina', 1, type=int)
     orden = request.args.get('orden', 'fecha')
     direccion = request.args.get('dir', 'desc')
+    busqueda = request.args.get('q', '').strip()
 
     columnas_validas = {
         'marca': Casco.marca,
@@ -583,7 +584,21 @@ def admin_panel():
     col = columnas_validas.get(orden, Casco.fecha_agregado)
     col = col.desc() if direccion == 'desc' else col.asc()
 
-    cascos_paginados = Casco.query.order_by(col).paginate(
+    query = Casco.query
+
+    if busqueda:
+        termino = f'%{busqueda}%'
+        query = query.filter(
+            db.or_(
+                Casco.marca.ilike(termino),
+                Casco.nombre_modelo.ilike(termino),
+                Casco.color.ilike(termino),
+                Casco.tipo.ilike(termino),
+                Casco.talle.ilike(termino),
+            )
+        )
+
+    cascos_paginados = query.order_by(col).paginate(
         page=pagina, per_page=7, error_out=False
     )
 
@@ -591,8 +606,8 @@ def admin_panel():
                            cascos=cascos_paginados.items,
                            paginacion=cascos_paginados,
                            orden=orden,
-                           direccion=direccion)
-
+                           direccion=direccion,
+                           busqueda=busqueda)
 
 @app.route('/admin/editar/<int:casco_id>', methods=['GET', 'POST'])
 @login_required
