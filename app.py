@@ -512,15 +512,16 @@ def rechazar_pedido(pedido_id):
 def eliminar_pedido(pedido_id):
     pedido = Pedido.query.get_or_404(pedido_id)
     
-    # Liberar los cascos reservados antes de eliminar
+    # Liberar cascos si el pedido estaba pendiente o reservado
     for item in pedido.items:
-        if pedido.estado == 'pendiente':
+        if pedido.estado in ['pendiente', 'rechazado']:
             item.casco.reservado = False
     
     db.session.delete(pedido)
     db.session.commit()
     flash(f'Pedido #{pedido_id} eliminado.', 'success')
     return redirect(url_for('admin_pedidos'))
+
 
 
 # -------------------------------------------------------

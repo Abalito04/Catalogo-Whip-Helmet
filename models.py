@@ -64,7 +64,8 @@ class Pedido(db.Model):
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
     
     # Relación con items
-    items = db.relationship('ItemPedido', backref='pedido', lazy=True)
+    items = db.relationship('ItemPedido', backref='pedido', cascade='all, delete-orphan')
+
     
     def __repr__(self):
         return f'<Pedido #{self.id} - {self.nombre} {self.apellido}>'
