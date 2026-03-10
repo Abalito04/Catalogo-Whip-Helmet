@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Datos de transferencia - WHIP HELMETS{% endblock %}
+
+{% block content %}
+<div class="resultado-wrapper">
+    <div class="resultado-card">
+        <div class="resultado-icono">🏦</div>
+        <h2>¡Casi listo!</h2>
+        <p class="resultado-subtitulo">Pedido <strong>#{{ pedido.id }}</strong> registrado</p>
+
+        <div class="transferencia-datos">
+            <h3>Realizá la transferencia a:</h3>
+            <div class="dato-bancario">
+                <span class="dato-label">CBU/CVU</span>
+                <span class="dato-valor">{{ datos.cbu }}</span>
+            </div>
+            <div class="dato-bancario">
+                <span class="dato-label">Alias</span>
+                <span class="dato-valor">{{ datos.alias }}</span>
+            </div>
+            <div class="dato-bancario">
+                <span class="dato-label">Titular</span>
+                <span class="dato-valor">{{ datos.titular }}</span>
+            </div>
+            <div class="dato-bancario">
+                <span class="dato-label">CUIL</span>
+                <span class="dato-valor">{{ datos.cuil }}</span>
+            </div>
+            <div class="dato-bancario total-transferencia">
+                <span class="dato-label">Monto</span>
+                <span class="dato-valor">${{ "%.2f"|format(pedido.total) }}</span>
+            </div>
+        </div>
+
+        <p class="instruccion">Una vez realizada la transferencia, envianos el comprobante por WhatsApp para confirmar tu pedido.</p>
+
+        <a href="{{ wsp_url }}" target="_blank" class="btn-wsp-resultado">
+            📲 Enviar comprobante por WhatsApp
+        </a>
+
+        <a href="{{ url_for('index') }}" class="btn-volver-inicio">Volver al catálogo</a>
+    </div>
+</div>
+{% endblock %}

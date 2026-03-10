@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Carrito - WHIP HELMETS{% endblock %}
+
+{% block content %}
+<div class="carrito-wrapper">
+    <h2 class="carrito-titulo">Tu Carrito</h2>
+
+    {% if cascos %}
+    <div class="carrito-contenido">
+        <div class="carrito-items">
+            {% for casco in cascos %}
+            <div class="carrito-item">
+                <div class="carrito-item-imagen">
+                    {% if casco.imagen_principal %}
+                    <img src="{{ casco.imagen_principal }}" alt="{{ casco.marca }} {{ casco.nombre_modelo }}">
+                    {% else %}
+                    <div class="sin-imagen-carrito">Sin imagen</div>
+                    {% endif %}
+                </div>
+                <div class="carrito-item-info">
+                    <h3>{{ casco.marca }}</h3>
+                    <p class="modelo">{{ casco.nombre_modelo }}</p>
+                    {% if casco.talle %}<p class="talle">Talle: {{ casco.talle }}</p>{% endif %}
+                    {% if casco.color %}<p class="color">Color: {{ casco.color }}</p>{% endif %}
+                    <p class="precio-carrito">${{ "%.2f"|format(casco.precio) }}</p>
+                </div>
+                <form action="{{ url_for('quitar_del_carrito', casco_id=casco.id) }}" method="POST" class="form-quitar">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn-quitar">✕</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="carrito-resumen">
+            <h3>Resumen</h3>
+            <div class="resumen-linea">
+                <span>Subtotal</span>
+                <span>${{ "%.2f"|format(total) }}</span>
+            </div>
+            <div class="resumen-linea total-final">
+                <span>Total</span>
+                <span>${{ "%.2f"|format(total) }}</span>
+            </div>
+            <a href="{{ url_for('checkout') }}" class="btn-checkout">Continuar compra →</a>
+            <a href="{{ url_for('index') }}" class="btn-seguir">← Seguir comprando</a>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="carrito-vacio">
+        <p>Tu carrito está vacío.</p>
+        <a href="{{ url_for('index') }}" class="btn">Ver catálogo</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

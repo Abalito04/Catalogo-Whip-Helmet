@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Checkout - WHIP HELMETS{% endblock %}
+
+{% block content %}
+<div class="checkout-wrapper">
+    <h2 class="checkout-titulo">Datos de la compra</h2>
+
+    <div class="checkout-contenido">
+        <!-- Formulario -->
+        <form method="POST" action="{{ url_for('checkout') }}" class="checkout-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="form-seccion">
+                <h3>Datos personales</h3>
+                <div class="form-fila">
+                    <div class="form-grupo">
+                        <label>Nombre *</label>
+                        <input type="text" name="nombre" required placeholder="Tu nombre">
+                    </div>
+                    <div class="form-grupo">
+                        <label>Apellido *</label>
+                        <input type="text" name="apellido" required placeholder="Tu apellido">
+                    </div>
+                </div>
+                <div class="form-fila">
+                    <div class="form-grupo">
+                        <label>DNI *</label>
+                        <input type="text" name="dni" required placeholder="Sin puntos">
+                    </div>
+                    <div class="form-grupo">
+                        <label>Teléfono *</label>
+                        <input type="text" name="telefono" required placeholder="Ej: 3884123456">
+                    </div>
+                </div>
+                <div class="form-grupo">
+                    <label>Email <span class="opcional">(opcional)</span></label>
+                    <input type="email" name="email" placeholder="tu@email.com">
+                </div>
+            </div>
+
+            <div class="form-seccion">
+                <h3>Tipo de entrega</h3>
+                <div class="entrega-opciones">
+                    <label class="entrega-opcion">
+                        <input type="radio" name="tipo_entrega" value="retiro" checked onchange="toggleEnvio(this)">
+                        <span class="entrega-card">
+                            <strong>🏪 Retiro en local</strong>
+                            <small>Coordinamos por WhatsApp</small>
+                        </span>
+                    </label>
+                    <label class="entrega-opcion">
+                        <input type="radio" name="tipo_entrega" value="envio" onchange="toggleEnvio(this)">
+                        <span class="entrega-card">
+                            <strong>📦 Envío a domicilio</strong>
+                            <small>A coordinar con el vendedor</small>
+                        </span>
+                    </label>
+                </div>
+
+                <div id="datos-envio" style="display:none;">
+                    <div class="form-fila">
+                        <div class="form-grupo">
+                            <label>Provincia *</label>
+                            <input type="text" name="provincia" placeholder="Ej: Jujuy">
+                        </div>
+                        <div class="form-grupo">
+                            <label>Ciudad *</label>
+                            <input type="text" name="ciudad" placeholder="Ej: San Salvador">
+                        </div>
+                    </div>
+                    <div class="form-fila">
+                        <div class="form-grupo">
+                            <label>Dirección *</label>
+                            <input type="text" name="direccion" placeholder="Calle, número, piso">
+                        </div>
+                        <div class="form-grupo">
+                            <label>Código Postal *</label>
+                            <input type="text" name="codigo_postal" placeholder="Ej: 4600">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-checkout">Elegir método de pago →</button>
+        </form>
+
+        <!-- Resumen lateral -->
+        <div class="checkout-resumen">
+            <h3>Tu pedido</h3>
+            {% for casco in cascos %}
+            <div class="resumen-item">
+                {% if casco.imagen_principal %}
+                <img src="{{ casco.imagen_principal }}" alt="{{ casco.marca }}">
+                {% endif %}
+                <div>
+                    <p><strong>{{ casco.marca }}</strong></p>
+                    <p>{{ casco.nombre_modelo }}</p>
+                    <p class="precio-resumen">${{ "%.2f"|format(casco.precio) }}</p>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="resumen-total">
+                <span>Total</span>
+                <span>${{ "%.2f"|format(total) }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleEnvio(radio) {
+    const datosEnvio = document.getElementById('datos-envio');
+    datosEnvio.style.display = radio.value === 'envio' ? 'block' : 'none';
+
+    const inputs = datosEnvio.querySelectorAll('input');
+    inputs.forEach(input => {
+        input.required = radio.value === 'envio';
+    });
+}
+</script>
+{% endblock %}

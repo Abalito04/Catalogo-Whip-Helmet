@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Pago exitoso - WHIP HELMETS{% endblock %}
+
+{% block content %}
+<div class="resultado-wrapper">
+    <div class="resultado-card resultado-exito">
+        <div class="resultado-icono">✅</div>
+        <h2>¡Pago realizado!</h2>
+        {% if pedido %}
+        <p class="resultado-subtitulo">Pedido <strong>#{{ pedido.id }}</strong> confirmado</p>
+        <div class="pedido-resumen">
+            {% for item in pedido.items %}
+            <p>{{ item.casco.marca }} {{ item.casco.nombre_modelo }}</p>
+            {% endfor %}
+        </div>
+        {% endif %}
+        <p class="instruccion">Ahora contactate con nosotros por WhatsApp para coordinar
+            {% if pedido and pedido.tipo_entrega == 'envio' %}el envío{% else %}el retiro{% endif %}
+            de tu casco.</p>
+        <a href="{{ wsp_url }}" target="_blank" class="btn-wsp-resultado">
+            📲 Coordinar por WhatsApp
+        </a>
+        <a href="{{ url_for('index') }}" class="btn-volver-inicio">Volver al catálogo</a>
+    </div>
+</div>
+{% endblock %}

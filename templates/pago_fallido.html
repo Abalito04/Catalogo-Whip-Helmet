@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Pago fallido - WHIP HELMETS{% endblock %}
+
+{% block content %}
+<div class="resultado-wrapper">
+    <div class="resultado-card resultado-fallo">
+        <div class="resultado-icono">❌</div>
+        <h2>Algo salió mal</h2>
+        {% if pedido %}
+        <p class="resultado-subtitulo">Pedido <strong>#{{ pedido.id }}</strong></p>
+        {% endif %}
+        <p class="instruccion">No se pudo procesar el pago. Contactate con nosotros por WhatsApp y te ayudamos a resolverlo.</p>
+        <a href="{{ wsp_url }}" target="_blank" class="btn-wsp-resultado">
+            📲 Contactar por WhatsApp
+        </a>
+        <a href="{{ url_for('elegir_pago') }}" class="btn-reintentar">Reintentar pago</a>
+        <a href="{{ url_for('index') }}" class="btn-volver-inicio">Volver al catálogo</a>
+    </div>
+</div>
+{% endblock %}

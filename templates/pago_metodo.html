@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Método de pago - WHIP HELMETS{% endblock %}
+
+{% block content %}
+<div class="pago-wrapper">
+    <h2 class="pago-titulo">Elegí cómo pagar</h2>
+
+    <div class="metodos-pago">
+
+        <!-- MercadoPago -->
+        <form action="{{ url_for('pago_mercadopago') }}" method="POST" class="metodo-card">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="metodo-icono">💳</div>
+            <h3>MercadoPago</h3>
+            <p>Pagá con tarjeta de crédito, débito o dinero en cuenta de MP</p>
+            <button type="submit" class="btn-metodo btn-mp">Pagar con MercadoPago</button>
+        </form>
+
+        <!-- Transferencia -->
+        <form action="{{ url_for('pago_transferencia') }}" method="POST" class="metodo-card">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="metodo-icono">🏦</div>
+            <h3>Transferencia / CVU</h3>
+            <p>Transferí desde tu banco o billetera virtual y enviá el comprobante por WhatsApp</p>
+            <button type="submit" class="btn-metodo btn-transferencia">Pagar con Transferencia</button>
+        </form>
+
+    </div>
+
+    <div class="total-pago">
+        <span>Total a pagar:</span>
+        <strong>${{ "%.2f"|format(total) }}</strong>
+    </div>
+
+    <a href="{{ url_for('checkout') }}" class="btn-volver">← Volver</a>
+</div>
+{% endblock %}

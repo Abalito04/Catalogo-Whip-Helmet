@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Pedidos - Admin WHIP HELMETS{% endblock %}
+
+{% block content %}
+<div class="admin-pedidos-wrapper">
+    <div class="admin-header">
+        <h2>Pedidos</h2>
+        <a href="{{ url_for('admin_panel') }}" class="btn-volver">← Panel</a>
+    </div>
+
+    <!-- Filtros por estado -->
+    <div class="filtros-estado">
+        <a href="{{ url_for('admin_pedidos') }}" class="filtro-estado-btn {% if not estado_filtro %}active{% endif %}">Todos</a>
+        <a href="{{ url_for('admin_pedidos', estado='pendiente') }}" class="filtro-estado-btn {% if estado_filtro == 'pendiente' %}active{% endif %}">Pendientes</a>
+        <a href="{{ url_for('admin_pedidos', estado='confirmado') }}" class="filtro-estado-btn {% if estado_filtro == 'confirmado' %}active{% endif %}">Confirmados</a>
+        <a href="{{ url_for('admin_pedidos', estado='rechazado') }}" class="filtro-estado-btn {% if estado_filtro == 'rechazado' %}active{% endif %}">Rechazados</a>
+    </div>
+
+    {% if pedidos %}
+    <div class="pedidos-lista">
+        {% for pedido in pedidos %}
+        <div class="pedido-card estado-{{ pedido.estado }}">
+            <div class="pedido-header">
+                <span class="pedido-id">#{{ pedido.id }}</span>
+                <span class="pedido-estado badge-estado-{{ pedido.estado }}">{{ pedido.estado|upper }}</span>
+                <span class="pedido-fecha">{{ pedido.fecha.strftime('%d/%m/%Y %H:%M') }}</span>
+                <span class="pedido-metodo">{{ pedido.metodo_pago|upper }}</span>
+            </div>
+
+            <div class="pedido-body">
+                <div class="pedido-cliente">
+                    <p><strong>{{ pedido.nombre }} {{ pedido.apellido }}</strong></p>
+                    <p>DNI: {{ pedido.dni }}</p>
+                    <p>Tel: {{ pedido.telefono }}</p>
+                    {% if pedido.email %}<p>{{ pedido.email }}</p>{% endif %}
+                </div>
+
+                <div class="pedido-entrega">
+                    <p><strong>{{ pedido.tipo_entrega|capitalize }}</strong></p>
+                    {% if pedido.tipo_entrega == 'envio' %}
+                    <p>{{ pedido.direccion }}</p>
+                    <p>{{ pedido.ciudad }}, {{ pedido.provincia }} ({{ pedido.codigo_postal }})</p>
+                    {% endif %}
+                </div>
+
+                <div class="pedido-items">
+                    {% for item in pedido.items %}
+                    <div class="pedido-item-mini">
+                        {% if item.casco.imagen_principal %}
+                        <img src="{{ item.casco.imagen_principal }}" alt="{{ item.casco.marca }}">
+                        {% endif %}
+                        <span>{{ item.casco.marca }} {{ item.casco.nombre_modelo }}</span>
+                        <span>${{ "%.2f"|format(item.precio) }}</span>
+                    </div>
+                    {% endfor %}
+                    <p class="pedido-total">Total: <strong>${{ "%.2f"|format(pedido.total) }}</strong></p>
+                </div>
+            </div>
+
+            {% if pedido.estado == 'pendiente' %}
+            <div class="pedido-acciones">
+                <form action="{{ url_for('confirmar_pedido', pedido_id=pedido.id) }}" method="POST" style="display:inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn-confirmar">✔ Confirmar</button>
+                </form>
+                <form action="{{ url_for('rechazar_pedido', pedido_id=pedido.id) }}" method="POST" style="display:inline">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn-rechazar" onclick="return confirm('¿Seguro que querés rechazar este pedido?')">✘ Rechazar</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="sin-pedidos">
+        <p>No hay pedidos {% if estado_filtro %}con estado "{{ estado_filtro }}"{% endif %}.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

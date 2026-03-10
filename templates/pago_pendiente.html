@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Pago pendiente - WHIP HELMETS{% endblock %}
+
+{% block content %}
+<div class="resultado-wrapper">
+    <div class="resultado-card resultado-pendiente">
+        <div class="resultado-icono">⏳</div>
+        <h2>Pago en proceso</h2>
+        {% if pedido %}
+        <p class="resultado-subtitulo">Pedido <strong>#{{ pedido.id }}</strong></p>
+        {% endif %}
+        <p class="instruccion">Tu pago está siendo procesado por MercadoPago. Una vez confirmado te contactamos. Si tenés dudas, escribinos por WhatsApp.</p>
+        <a href="{{ wsp_url }}" target="_blank" class="btn-wsp-resultado">
+            📲 Consultar por WhatsApp
+        </a>
+        <a href="{{ url_for('index') }}" class="btn-volver-inicio">Volver al catálogo</a>
+    </div>
+</div>
+{% endblock %}

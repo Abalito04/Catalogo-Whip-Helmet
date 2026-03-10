@@ -18,6 +18,9 @@
     <header>
        <nav class="navbar">
            <div class="navbar-content">
+            <a href="{{ url_for('ver_carrito') }}" class="nav-carrito">
+                🛒 Carrito {% if get_carrito_count() > 0 %}({{ get_carrito_count() }}){% endif %}
+                </a>            
                <a href="{{ url_for('index') }}" class="logo">
                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WHIP-HELMETS">
                    <span>WHIP-HELMETS</span>

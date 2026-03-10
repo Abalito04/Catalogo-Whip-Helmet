@@ -119,6 +119,18 @@
             {% endif %}
 
             <!-- BOTONES SECUNDARIOS - ACÁ EN PRODUCTO-INFO -->
+                        <!-- BOTONES SECUNDARIOS - ACÁ EN PRODUCTO-INFO -->
+            {% if casco.disponible and not casco.reservado %}
+            <form action="{{ url_for('agregar_al_carrito', casco_id=casco.id) }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn-agregar-carrito">🛒 Agregar al carrito</button>
+            </form>
+            {% elif casco.reservado %}
+            <div class="btn-reservado">⏳ Reservado</div>
+            {% else %}
+            <div class="btn-no-disponible">✗ No disponible</div>
+            {% endif %}
+
             <div class="botones-info">
                 <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="btn-instagram">
                     📸 Visitar nuestro Instagram
@@ -129,6 +141,7 @@
                     💬 Consultar por WhatsApp
                 </a>
             </div>
+
         </div>
     </div>
 </div>
