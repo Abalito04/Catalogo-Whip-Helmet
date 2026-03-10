@@ -8,3 +8,5 @@ gunicorn==21.2.0
 cloudinary==1.41.0
 rembg
 onnxruntime
+Flask-WTF==1.2.2
+Flask-Limiter==3.9.0
