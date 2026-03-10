@@ -3,13 +3,18 @@
 {% block title %}Panel Admin - WHIP-HELMETS{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 1200px; margin: 50px auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-        <h1 style="color: #ffd700;">Panel de Administración</h1>
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h1 style="color: #ffd700;">Panel de Administración</h1>
+    <div style="display: flex; gap: 12px;">
+        <a href="{{ url_for('admin_pedidos') }}" style="background: #2a2a2a; color: #ffd700; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; border: 2px solid #ffd700;">
+            📋 Ver Pedidos
+        </a>
         <a href="{{ url_for('agregar_casco') }}" style="background: #ffd700; color: #000; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
             ➕ Agregar Casco
         </a>
     </div>
+</div>
+
 
     <div style="background: white; border-radius: 8px; padding: 20px; overflow-x: auto;">
         <table id="tabla-cascos" style="width: 100%; border-collapse: collapse;">

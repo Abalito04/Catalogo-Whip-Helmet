@@ -17,34 +17,37 @@
 <body>
     <header>
        <nav class="navbar">
-           <div class="navbar-content">
+    <div class="navbar-content">
+        <a href="{{ url_for('index') }}" class="logo">
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WHIP-HELMETS">
+            <span>WHIP-HELMETS</span>
+        </a>
+        <div class="nav-links">
+            <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="instagram-btn">
+                📸 Instagram
+            </a>
+            <a href="https://wa.me/542954544001" target="_blank" class="whatsapp-btn">
+                💬 WhatsApp
+            </a>
             <a href="{{ url_for('ver_carrito') }}" class="nav-carrito">
-                🛒 Carrito {% if get_carrito_count() > 0 %}({{ get_carrito_count() }}){% endif %}
-                </a>            
-               <a href="{{ url_for('index') }}" class="logo">
-                   <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WHIP-HELMETS">
-                   <span>WHIP-HELMETS</span>
-               </a>
-               <div class="nav-links">
-                   <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="instagram-btn">
-                    📸 Instagram
-                   </a>
-                   <a href="https://wa.me/542954544001" target="_blank" class="whatsapp-btn">
-                    💬 WhatsApp
-                   </a>
-                   {% if current_user.is_authenticated %}
-                   <a href="{{ url_for('admin_panel') }}" class="admin-btn authenticated">
-                       ⚙️ Admin
-                   </a>
-                   {% else %}
-                   <a href="{{ url_for('login') }}" class="admin-btn">
-                       🔒 Admin
-                   </a>
-                   {% endif %}
+                🛒 {% if get_carrito_count() > 0 %}({{ get_carrito_count() }}){% endif %}
+            </a>
+            {% if current_user.is_authenticated %}
+            <a href="{{ url_for('admin_pedidos') }}" class="admin-btn">
+                📋 Pedidos
+            </a>
+            <a href="{{ url_for('admin_panel') }}" class="admin-btn authenticated">
+                ⚙️ Admin
+            </a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="admin-btn">
+                🔒 Admin
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
 
-               </div>
-           </div>
-       </nav>
     </header>
 
     <main class="container">
