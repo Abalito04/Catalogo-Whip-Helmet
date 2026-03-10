@@ -21,15 +21,35 @@
             <thead>
                 <tr style="background: #f5f5f5; text-align: left;">
                     <th style="padding: 12px; border-bottom: 2px solid #ddd;">Foto</th>
-                    <th class="sortable" data-col="1" data-tipo="texto" style="padding: 12px; border-bottom: 2px solid #ddd; cursor: pointer; user-select: none;">Marca <span class="flecha">↕</span></th>
-                    <th class="sortable" data-col="2" data-tipo="texto" style="padding: 12px; border-bottom: 2px solid #ddd; cursor: pointer; user-select: none;">Modelo <span class="flecha">↕</span></th>
-                    <th class="sortable" data-col="3" data-tipo="texto" style="padding: 12px; border-bottom: 2px solid #ddd; cursor: pointer; user-select: none;">Condición <span class="flecha">↕</span></th>
-                    <th class="sortable" data-col="4" data-tipo="numero" style="padding: 12px; border-bottom: 2px solid #ddd; cursor: pointer; user-select: none;">Precio <span class="flecha">↕</span></th>
-                    <th class="sortable" data-col="5" data-tipo="talle" style="padding: 12px; border-bottom: 2px solid #ddd; cursor: pointer; user-select: none;">Talle <span class="flecha">↕</span></th>
-                    <th class="sortable" data-col="6" data-tipo="texto" style="padding: 12px; border-bottom: 2px solid #ddd; cursor: pointer; user-select: none;">Estado <span class="flecha">↕</span></th>
+                
+                    {% set cols = [
+                        ('marca', 'Marca'),
+                        ('modelo', 'Modelo'),
+                        ('condicion', 'Condición'),
+                        ('precio', 'Precio'),
+                        ('talle', 'Talle'),
+                        ('disponible', 'Estado')
+                    ] %}
+                    
+                    {% for col_key, col_label in cols %}
+                    {% set nueva_dir = 'desc' if (orden == col_key and direccion == 'asc') else 'asc' %}
+                    <th style="padding: 12px; border-bottom: 2px solid #ddd;">
+                        <a href="{{ url_for('admin_panel', orden=col_key, dir=nueva_dir, pagina=1) }}"
+                        style="color: inherit; text-decoration: none; display: flex; align-items: center; gap:           6px; white-space: nowrap;">
+                            {{ col_label }}
+                            {% if orden == col_key %}
+                                {{ '↑' if direccion == 'asc' else '↓' }}
+                            {% else %}
+                                <span style="color: #aaa;">↕</span>
+                            {% endif %}
+                        </a>
+                    </th>
+                    {% endfor %}
+                
                     <th style="padding: 12px; border-bottom: 2px solid #ddd;">Acciones</th>
                 </tr>
             </thead>
+
             <tbody>
                 {% for casco in cascos %}
                 <tr style="border-bottom: 1px solid #eee;">
@@ -129,78 +149,5 @@
     </div>
 </div>
 
-<script>
-const ORDEN_TALLES = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'];
-let columnaActual = -1;
-let ascendente = true;
-
-document.querySelectorAll('.sortable').forEach(function(th) {
-    th.addEventListener('click', function() {
-        const col = parseInt(this.getAttribute('data-col'));
-        const tipo = this.getAttribute('data-tipo');
-
-        if (columnaActual === col) {
-            ascendente = !ascendente;
-        } else {
-            columnaActual = col;
-            ascendente = true;
-        }
-
-        document.querySelectorAll('.sortable .flecha').forEach(f => f.textContent = '↕');
-        this.querySelector('.flecha').textContent = ascendente ? '↑' : '↓';
-
-        const tbody = document.querySelector('#tabla-cascos tbody');
-        const filas = Array.from(tbody.querySelectorAll('tr'));
-
-        filas.sort(function(a, b) {
-            const celdaA = a.querySelectorAll('td')[col];
-            const celdaB = b.querySelectorAll('td')[col];
-
-            let valorA = (celdaA.getAttribute('data-valor') || celdaA.textContent).trim().toLowerCase();
-            let valorB = (celdaB.getAttribute('data-valor') || celdaB.textContent).trim().toLowerCase();
-
-            if (tipo === 'numero') {
-                valorA = parseFloat(valorA) || 0;
-                valorB = parseFloat(valorB) || 0;
-                return ascendente ? valorA - valorB : valorB - valorA;
-            }
-
-            if (tipo === 'talle') {
-                const idxA = ORDEN_TALLES.indexOf(valorA.toUpperCase());
-                const idxB = ORDEN_TALLES.indexOf(valorB.toUpperCase());
-                const posA = idxA === -1 ? 999 : idxA;
-                const posB = idxB === -1 ? 999 : idxB;
-                return ascendente ? posA - posB : posB - posA;
-            }
-
-            if (valorA < valorB) return ascendente ? -1 : 1;
-            if (valorA > valorB) return ascendente ? 1 : -1;
-            return 0;
-        });
-
-        filas.forEach(fila => tbody.appendChild(fila));
-    });
-});
-
-document.querySelectorAll('.btn-eliminar-casco').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-        const nombre = this.getAttribute('data-nombre');
-        if (confirm('⚠️ ¿Estás seguro de eliminar el casco "' + nombre + '"?\n\nEsta acción no se puede deshacer.')) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = this.getAttribute('data-url');
-
-            const csrfInput = document.createElement('input');
-            csrfInput.type = 'hidden';
-            csrfInput.name = 'csrf_token';
-            csrfInput.value = '{{ csrf_token() }}';
-            form.appendChild(csrfInput);
-
-            document.body.appendChild(form);
-            form.submit();
-        }
-    });
-});
-</script>
 
 {% endblock %}

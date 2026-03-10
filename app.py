@@ -567,8 +567,31 @@ def agregar_casco():
 @login_required
 def admin_panel():
     pagina = request.args.get('pagina', 1, type=int)
-    cascos_paginados = Casco.query.order_by(Casco.fecha_agregado.desc()).paginate(page=pagina, per_page=7, error_out=False)
-    return render_template('admin_panel.html', cascos=cascos_paginados.items, paginacion=cascos_paginados)
+    orden = request.args.get('orden', 'fecha')
+    direccion = request.args.get('dir', 'desc')
+
+    columnas_validas = {
+        'marca': Casco.marca,
+        'modelo': Casco.nombre_modelo,
+        'condicion': Casco.condicion,
+        'precio': Casco.precio,
+        'talle': Casco.talle,
+        'disponible': Casco.disponible,
+        'fecha': Casco.fecha_agregado
+    }
+
+    col = columnas_validas.get(orden, Casco.fecha_agregado)
+    col = col.desc() if direccion == 'desc' else col.asc()
+
+    cascos_paginados = Casco.query.order_by(col).paginate(
+        page=pagina, per_page=7, error_out=False
+    )
+
+    return render_template('admin_panel.html',
+                           cascos=cascos_paginados.items,
+                           paginacion=cascos_paginados,
+                           orden=orden,
+                           direccion=direccion)
 
 
 @app.route('/admin/editar/<int:casco_id>', methods=['GET', 'POST'])
