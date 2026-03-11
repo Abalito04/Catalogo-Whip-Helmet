@@ -55,11 +55,7 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
-    try:
-        db.engine.execute("ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_1_cuota FLOAT")
-        db.engine.execute("ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_3_cuotas FLOAT")
-    except:
-        pass
+    
 
 
 
