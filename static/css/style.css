@@ -2256,3 +2256,38 @@ footer a {
         padding: 4px;
     }
 }
+
+.bloque-precios {
+    margin: 15px 0;
+}
+
+.precio-efectivo {
+    margin-bottom: 10px;
+}
+
+.precio-tarjeta {
+    background: #f8f9fa;
+    border-left: 3px solid #ffd700;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+.precio-label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.precio-cuota {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.precio-cuotas {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
