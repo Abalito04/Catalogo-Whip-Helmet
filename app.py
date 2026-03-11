@@ -55,6 +55,15 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+    try:
+        db.session.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_1_cuota FLOAT'))
+        db.session.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_3_cuotas FLOAT'))
+        db.session.commit()
+        print("✅ Columnas de precios OK")
+    except Exception as e:
+        db.session.rollback()
+        print(f"ℹ️ Migración: {e}")
+
     
 
 
