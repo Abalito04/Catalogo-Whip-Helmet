@@ -99,7 +99,9 @@ def precargar_modelo_rembg():
         print(f"⚠️ No se pudo pre-cargar rembg: {e}")
 
 
-precargar_modelo_rembg()
+import threading
+threading.Thread(target=precargar_modelo_rembg, daemon=True).start()
+
 
 
 # -------------------------------------------------------
