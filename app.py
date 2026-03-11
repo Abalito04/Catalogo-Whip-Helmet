@@ -59,12 +59,16 @@ with app.app_context():
         db.session.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_1_cuota FLOAT'))
         db.session.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_3_cuotas FLOAT'))
         db.session.commit()
-        print("✅ Columnas de precios OK")
+        print("✅ Columnas OK")
     except Exception as e:
         db.session.rollback()
-        print(f"ℹ️ Migración: {e}")
-
+        print(f"❌ Error migración: {e}")
     
+    # Verificar que existen
+    result = db.session.execute(db.text("SELECT column_name FROM information_schema.columns WHERE table_name='cascos'"))
+    cols = [r[0] for r in result]
+    print(f"📋 Columnas en cascos: {cols}")
+
 
 
 
