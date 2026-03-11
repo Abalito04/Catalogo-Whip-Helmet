@@ -81,7 +81,22 @@
             <h2 class="modelo-titulo">{{ casco.nombre_modelo }}</h2>
 
             <!-- Precio -->
-            <p class="precio-grande">${{ "%.2f"|format(casco.precio) }}</p>
+            <div class="bloque-precios">
+                <div class="precio-efectivo">
+                    <span class="precio-label">💵 Efectivo / Transferencia</span>
+                    <span class="precio-grande">${{ "{:,.0f}".format(casco.precio) }}</span>
+                </div>
+            
+                {% if casco.precio_1_cuota %}
+                <div class="precio-tarjeta">
+                    <span class="precio-label">💳 Con tarjeta</span>
+                    <span class="precio-cuota">1 pago de ${{ "{:,.0f}".format(casco.precio_1_cuota) }}</span>
+                    {% if casco.precio_3_cuotas %}
+                    <span class="precio-cuota">3 cuotas de ${{ "{:,.0f}".format(casco.precio_3_cuotas) }}</span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
 
             <!-- Especificaciones -->
             <div class="especificaciones">

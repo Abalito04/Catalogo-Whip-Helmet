@@ -110,7 +110,11 @@
                         <p class="color">Color: {{ casco.color }}</p>
                         {% endif %}
                         
-                        <p class="precio">${{ "%.2f"|format(casco.precio) }}</p>
+                        <p class="precio">${{ "{:,.0f}".format(casco.precio) }}</p>
+                        {% if casco.precio_3_cuotas %}
+                        <p class="precio-cuotas">3x ${{ "{:,.0f}".format(casco.precio_3_cuotas) }}</p>
+                        {% endif %}
+
                     </div>
                 </a>
             </article>

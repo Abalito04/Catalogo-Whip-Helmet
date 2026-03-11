@@ -34,12 +34,24 @@
                 <option value="usado">Usado</option>
             </select>
         </div>
-
         <div style="margin-bottom: 20px;">
-            <label style="display: block; margin-bottom: 5px; font-weight: bold;">Precio *</label>
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">💵 Precio Efectivo /      Transferencia *</label>
             <input type="number" name="precio" step="0.01" required
                 style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
         </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">💳 Precio 1 cuota (con tarjeta)       </label>
+            <input type="number" name="precio_1_cuota" step="0.01"
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label style="display: block; margin-bottom: 5px; font-weight: bold;">💳 Precio cada cuota en 3         cuotas</label>
+            <input type="number" name="precio_3_cuotas" step="0.01"
+                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+        </div>
+
 
         <div style="margin-bottom: 20px;">
             <label style="display: block; margin-bottom: 5px; font-weight: bold;">Talle</label>

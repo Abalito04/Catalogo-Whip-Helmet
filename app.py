@@ -55,6 +55,12 @@ db.init_app(app)
 
 with app.app_context():
     db.create_all()
+    try:
+        db.engine.execute("ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_1_cuota FLOAT")
+        db.engine.execute("ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_3_cuotas FLOAT")
+    except:
+        pass
+
 
 
 # -------------------------------------------------------
@@ -568,7 +574,10 @@ def agregar_casco():
             imagenes_adicionales=','.join(imagenes_adicionales) if imagenes_adicionales else '',
             instagram_url=request.form.get('instagram_url', ''),
             disponible=True,
-            destacado=request.form.get('destacado') == 'on'
+            destacado=request.form.get('destacado') == 'on',
+            precio_1_cuota=request.form.get('precio_1_cuota', type=float),
+            precio_3_cuotas=request.form.get('precio_3_cuotas', type=float)
+
         )
 
         db.session.add(nuevo_casco)
@@ -672,6 +681,9 @@ def editar_casco(casco_id):
         casco.instagram_url = request.form.get('instagram_url', '')
         casco.disponible = 'disponible' in request.form
         casco.destacado = 'destacado' in request.form
+        casco.precio_1_cuota = request.form.get('precio_1_cuota', type=float)
+        casco.precio_3_cuotas = request.form.get('precio_3_cuotas', type=float)
+
 
         db.session.commit()
         flash('Casco actualizado correctamente', 'success')

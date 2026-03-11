@@ -77,7 +77,9 @@ class ItemPedido(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pedido_id = db.Column(db.Integer, db.ForeignKey('pedidos.id'), nullable=False)
     casco_id = db.Column(db.Integer, db.ForeignKey('cascos.id'), nullable=False)
-    precio = db.Column(db.Float, nullable=False)  # Precio al momento de compra
+    precio = db.Column(db.Float, nullable=False)  # precio efectivo/transferencia
+    precio_1_cuota = db.Column(db.Float, nullable=True)
+    precio_3_cuotas = db.Column(db.Float, nullable=True) # Precio al momento de compra
     
     casco = db.relationship('Casco')
     
