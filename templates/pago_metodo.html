@@ -7,9 +7,24 @@
 
     <div class="metodos-pago">
 
+        <!-- Campos comunes como macro para no repetir -->
+        {% macro campos_checkout() %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="nombre"        value="{{ checkout_data.nombre }}">
+            <input type="hidden" name="apellido"      value="{{ checkout_data.apellido }}">
+            <input type="hidden" name="dni"           value="{{ checkout_data.dni }}">
+            <input type="hidden" name="telefono"      value="{{ checkout_data.telefono }}">
+            <input type="hidden" name="email"         value="{{ checkout_data.email }}">
+            <input type="hidden" name="tipo_entrega"  value="{{ checkout_data.tipo_entrega }}">
+            <input type="hidden" name="codigo_postal" value="{{ checkout_data.codigo_postal }}">
+            <input type="hidden" name="provincia"     value="{{ checkout_data.provincia }}">
+            <input type="hidden" name="ciudad"        value="{{ checkout_data.ciudad }}">
+            <input type="hidden" name="direccion"     value="{{ checkout_data.direccion }}">
+        {% endmacro %}
+
         <!-- Transferencia / Efectivo -->
         <form action="{{ url_for('pago_transferencia') }}" method="POST" class="metodo-card">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {{ campos_checkout() }}
             <div class="metodo-icono">🏦</div>
             <h3>Transferencia / Efectivo</h3>
             <p>Transferí desde tu banco o pagá en efectivo y enviá el comprobante por WhatsApp</p>
@@ -19,22 +34,20 @@
 
         <!-- MP 1 Pago -->
         <form action="{{ url_for('pago_mercadopago') }}" method="POST" class="metodo-card">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {{ campos_checkout() }}
             <input type="hidden" name="metodo_mp" value="1_cuota">
             <div class="metodo-icono">💳</div>
             <h3>MercadoPago — 1 Pago</h3>
-            <p>Pagá con tarjeta o dinero en cuenta en un solo pago</p>
             <p class="precio-metodo"><strong>${{ "%.2f"|format(total_1_cuota) }}</strong></p>
             <button type="submit" class="btn-metodo btn-mp">Pagar 1 cuota</button>
         </form>
 
-        <!-- MP 3 Pagos -->
+        <!-- MP 3 Cuotas -->
         <form action="{{ url_for('pago_mercadopago') }}" method="POST" class="metodo-card">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            {{ campos_checkout() }}
             <input type="hidden" name="metodo_mp" value="3_cuotas">
             <div class="metodo-icono">📅</div>
             <h3>MercadoPago — 3 Cuotas</h3>
-            <p>Financiá en 3 cuotas con tarjeta de crédito</p>
             <p class="precio-metodo">
                 <strong>${{ "%.2f"|format(total_3_cuotas) }}</strong>
                 <small>(3 x ${{ "%.2f"|format(total_3_cuotas / 3) }})</small>

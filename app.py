@@ -58,11 +58,13 @@ with app.app_context():
     try:
         db.session.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_1_cuota FLOAT'))
         db.session.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_3_cuotas FLOAT'))
+        db.session.execute(db.text("ALTER TABLE pedidos ALTER COLUMN metodo_pago TYPE VARCHAR(30)"))  # ← acá
         db.session.commit()
         print("✅ Columnas OK")
     except Exception as e:
         db.session.rollback()
         print(f"❌ Error migración: {e}")
+
     
     # Verificar que existen
     result = db.session.execute(db.text("SELECT column_name FROM information_schema.columns WHERE table_name='cascos'"))
@@ -248,7 +250,8 @@ def checkout():
 
 @app.route('/pago/elegir')
 def elegir_pago():
-    if not session.get('checkout_data'):
+    checkout_data = session.get('checkout_data')
+    if not checkout_data:
         return redirect(url_for('checkout'))
 
     carrito_ids = session.get('carrito', [])
@@ -260,6 +263,7 @@ def elegir_pago():
 
     return render_template('pago_metodo.html',
             cascos=cascos,
+            checkout_data=checkout_data,
             total_efectivo=total_efectivo,
             total_1_cuota=total_1_cuota,
             total_3_cuotas=total_3_cuotas)
@@ -270,15 +274,27 @@ def elegir_pago():
 # -------------------------------------------------------
 @app.route('/pago/transferencia', methods=['POST'])
 def pago_transferencia():
-    if not session.get('checkout_data') or not session.get('carrito'):
+    carrito_ids = session.get('carrito')
+    if not carrito_ids:
         return redirect(url_for('index'))
 
-    checkout_data = session['checkout_data']
-    carrito_ids = session['carrito']
+    # Leer datos del form (hidden inputs desde pago_metodo.html)
+    checkout_data = {
+        'nombre':        request.form.get('nombre'),
+        'apellido':      request.form.get('apellido'),
+        'dni':           request.form.get('dni'),
+        'telefono':      request.form.get('telefono'),
+        'email':         request.form.get('email', ''),
+        'tipo_entrega':  request.form.get('tipo_entrega'),
+        'codigo_postal': request.form.get('codigo_postal', ''),
+        'provincia':     request.form.get('provincia', ''),
+        'ciudad':        request.form.get('ciudad', ''),
+        'direccion':     request.form.get('direccion', ''),
+    }
+
     cascos = Casco.query.filter(Casco.id.in_(carrito_ids)).all()
     total = sum(c.precio for c in cascos)
 
-    # Crear pedido en BD
     pedido = Pedido(
         nombre=checkout_data['nombre'],
         apellido=checkout_data['apellido'],
@@ -295,9 +311,8 @@ def pago_transferencia():
         total=total
     )
     db.session.add(pedido)
-    db.session.flush()  # Para obtener el ID antes del commit
+    db.session.flush()
 
-    # Agregar items y marcar cascos como reservados
     for casco in cascos:
         item = ItemPedido(pedido_id=pedido.id, casco_id=casco.id, precio=casco.precio)
         db.session.add(item)
@@ -305,21 +320,22 @@ def pago_transferencia():
 
     db.session.commit()
 
-    # Limpiar session
     session.pop('carrito', None)
     session.pop('checkout_data', None)
 
-    # Datos de transferencia desde variables de entorno
     datos_transferencia = {
-        'cbu': os.getenv('TRANSFERENCIA_CBU', ''),
-        'alias': os.getenv('TRANSFERENCIA_ALIAS', ''),
-        'titular': os.getenv('TRANSFERENCIA_TITULAR', ''),
-        'cuil': os.getenv('TRANSFERENCIA_CUIL', ''),
+        'cbu':      os.getenv('TRANSFERENCIA_CBU', ''),
+        'alias':    os.getenv('TRANSFERENCIA_ALIAS', ''),
+        'titular':  os.getenv('TRANSFERENCIA_TITULAR', ''),
+        'cuil':     os.getenv('TRANSFERENCIA_CUIL', ''),
     }
 
-    # Armar mensaje WhatsApp
     items_texto = ', '.join([f"{c.marca} {c.nombre_modelo}" for c in cascos])
-    entrega_texto = f"Envío a {checkout_data.get('ciudad', '')}, {checkout_data.get('provincia', '')}" if checkout_data['tipo_entrega'] == 'envio' else "Retiro en local"
+    entrega_texto = (
+        f"Envío a {checkout_data.get('ciudad', '')}, {checkout_data.get('provincia', '')}"
+        if checkout_data['tipo_entrega'] == 'envio'
+        else "Retiro en local"
+    )
     wsp_mensaje = (
         f"Hola! Realicé una transferencia para el pedido #{pedido.id}. "
         f"Productos: {items_texto}. "
@@ -336,24 +352,38 @@ def pago_transferencia():
                            wsp_url=wsp_url)
 
 
+
 # -------------------------------------------------------
 # PAGO CON MERCADOPAGO
 # -------------------------------------------------------
 @app.route('/pago/mercadopago', methods=['POST'])
 def pago_mercadopago():
-    if not session.get('checkout_data') or not session.get('carrito'):
+    carrito_ids = session.get('carrito')
+    if not carrito_ids:
         return redirect(url_for('index'))
 
     try:
         import mercadopago
         sdk = mercadopago.SDK(os.getenv('MP_ACCESS_TOKEN'))
 
-        metodo_mp = request.form.get('metodo_mp', '1_cuota')  # '1_cuota' o '3_cuotas'
-        checkout_data = session['checkout_data']
-        carrito_ids = session['carrito']
+        metodo_mp = request.form.get('metodo_mp', '1_cuota')
+
+        # Leer datos del form (vienen como hidden inputs desde pago_metodo.html)
+        checkout_data = {
+            'nombre':        request.form.get('nombre'),
+            'apellido':      request.form.get('apellido'),
+            'dni':           request.form.get('dni'),
+            'telefono':      request.form.get('telefono'),
+            'email':         request.form.get('email', ''),
+            'tipo_entrega':  request.form.get('tipo_entrega'),
+            'codigo_postal': request.form.get('codigo_postal', ''),
+            'provincia':     request.form.get('provincia', ''),
+            'ciudad':        request.form.get('ciudad', ''),
+            'direccion':     request.form.get('direccion', ''),
+        }
+
         cascos = Casco.query.filter(Casco.id.in_(carrito_ids)).all()
 
-        # Usar precio según método elegido
         def precio_casco(c):
             if metodo_mp == '3_cuotas':
                 return c.precio_3_cuotas or c.precio
@@ -362,8 +392,17 @@ def pago_mercadopago():
         total = sum(precio_casco(c) for c in cascos)
 
         pedido = Pedido(
-            # ... mismos campos que antes ...
-            metodo_pago=f'mercadopago_{metodo_mp}',  # guarda "mercadopago_1_cuota" o "mercadopago_3_cuotas"
+            nombre=checkout_data['nombre'],
+            apellido=checkout_data['apellido'],
+            dni=checkout_data['dni'],
+            telefono=checkout_data['telefono'],
+            email=checkout_data.get('email', ''),
+            tipo_entrega=checkout_data['tipo_entrega'],
+            codigo_postal=checkout_data.get('codigo_postal', ''),
+            provincia=checkout_data.get('provincia', ''),
+            ciudad=checkout_data.get('ciudad', ''),
+            direccion=checkout_data.get('direccion', ''),
+            metodo_pago=f'mp_{metodo_mp}',  # 'mp_1_cuota' o 'mp_3_cuotas' (<=20 chars)
             estado='pendiente',
             total=total
         )
@@ -392,7 +431,7 @@ def pago_mercadopago():
             "payer": {
                 "name": checkout_data['nombre'],
                 "surname": checkout_data['apellido'],
-                "email": checkout_data.get('email', 'cliente@whiphelmets.com'),
+                "email": checkout_data.get('email') or 'cliente@whiphelmets.com',
             },
             "back_urls": {
                 "success": f"{base_url}/pago/exitoso",
@@ -406,7 +445,6 @@ def pago_mercadopago():
         preference_response = sdk.preference().create(preference_data)
         preference = preference_response["response"]
 
-        # Limpiar carrito y checkout_data (el pedido ya está guardado)
         session.pop('carrito', None)
         session.pop('checkout_data', None)
 
@@ -416,6 +454,7 @@ def pago_mercadopago():
         print(f"❌ Error MercadoPago: {e}")
         flash(f'Error al procesar el pago: {str(e)}', 'error')
         return redirect(url_for('elegir_pago'))
+
 
 
 # -------------------------------------------------------
