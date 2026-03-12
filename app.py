@@ -837,14 +837,6 @@ def eliminar_casco(casco_id):
         flash(f'Error al eliminar: {str(e)}', 'error')
     return redirect(url_for('admin_panel'))
 
-@app.route('/admin/liberar-cascos', methods=['POST'])
-@login_required
-def liberar_cascos():
-    db.session.execute(db.text('UPDATE cascos SET reservado = FALSE'))
-    db.session.commit()
-    flash('Todos los cascos liberados.', 'success')
-    return redirect(url_for('admin_panel'))
-
 
 
 if __name__ == '__main__':
