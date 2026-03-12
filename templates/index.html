@@ -111,14 +111,16 @@
                         {% endif %}
                         
                         <p class="precio">${{ "{:,.0f}".format(casco.precio) }}</p>
+                        <p class="precio-etiqueta">💵 EFECTIVO / TRANSFERENCIA</p>
                         <div class="cuotas-card">
                             {% if casco.precio_1_cuota %}
                             <p class="precio-cuotas">💳 1 pago: ${{ "{:,.0f}".format(casco.precio_1_cuota) }}</p>
                             {% endif %}
                             {% if casco.precio_3_cuotas %}
-                            <p class="precio-cuotas">3x ${{ "{:,.0f}".format(casco.precio_3_cuotas) }}</p>
+                            <p class="precio-cuotas">💳 3x ${{ "{:,.0f}".format(casco.precio_3_cuotas) }}</p>
                             {% endif %}
                         </div>
+
 
 
                     </div>

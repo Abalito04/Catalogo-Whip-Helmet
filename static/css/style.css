@@ -419,17 +419,26 @@ main {
     margin-top: 10px;
 }
 
+.precio-etiqueta {
+    font-size: 11px;
+    color: #888;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 2px 0 6px 0;
+    text-transform: uppercase;
+}
+
 .cuotas-card {
-    margin-top: 6px;
+    margin-top: 4px;
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
 }
 
 .precio-cuotas {
-    font-size: 13px;
-    color: #555;
-    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    font-weight: 700;
     margin: 0;
 }
 
