@@ -440,6 +440,7 @@ main {
     color: #dddcdc;
     font-weight: 700;
     margin: 0;
+    display: block;
 }
 
 
@@ -2294,6 +2295,9 @@ footer a {
     border-left: 3px solid #ffd700;
     padding: 10px 15px;
     border-radius: 4px;
+    flex-direction: column;
+    display: flex;
+    gap: 6px;
 }
 
 .precio-label {
