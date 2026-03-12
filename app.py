@@ -586,8 +586,8 @@ def agregar_casco():
             instagram_url=request.form.get('instagram_url', ''),
             disponible=True,
             destacado=request.form.get('destacado') == 'on',
-            precio_1_cuota=request.form.get('precio_1_cuota', type=float),
-            precio_3_cuotas=request.form.get('precio_3_cuotas', type=float)
+            precio_1_cuota=float(request.form.get('precio_1_cuota', 0) or 0),
+            precio_3_cuotas=float(request.form.get('precio_3_cuotas', 0) or 0),
 
         )
 

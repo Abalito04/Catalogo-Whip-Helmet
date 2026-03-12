@@ -14,6 +14,9 @@ class Casco(db.Model):
     condicion = db.Column(db.String(10), nullable=False)
     
     precio = db.Column(db.Float, nullable=False)
+    precio_1_cuota = db.Column(db.Float, nullable=True)
+    precio_3_cuotas = db.Column(db.Float, nullable=True)
+    
     descripcion = db.Column(db.Text)
     talle = db.Column(db.String(10))
     color = db.Column(db.String(30))
