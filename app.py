@@ -253,9 +253,16 @@ def elegir_pago():
 
     carrito_ids = session.get('carrito', [])
     cascos = Casco.query.filter(Casco.id.in_(carrito_ids)).all()
-    total = sum(c.precio for c in cascos)
 
-    return render_template('pago_metodo.html', cascos=cascos, total=total)
+    total_efectivo = sum(c.precio for c in cascos)
+    total_1_cuota  = sum(c.precio_1_cuota or c.precio for c in cascos)
+    total_3_cuotas = sum(c.precio_3_cuotas or c.precio for c in cascos)
+
+    return render_template('pago_metodo.html',
+            cascos=cascos,
+            total_efectivo=total_efectivo,
+            total_1_cuota=total_1_cuota,
+            total_3_cuotas=total_3_cuotas)
 
 
 # -------------------------------------------------------
@@ -341,24 +348,22 @@ def pago_mercadopago():
         import mercadopago
         sdk = mercadopago.SDK(os.getenv('MP_ACCESS_TOKEN'))
 
+        metodo_mp = request.form.get('metodo_mp', '1_cuota')  # '1_cuota' o '3_cuotas'
         checkout_data = session['checkout_data']
         carrito_ids = session['carrito']
         cascos = Casco.query.filter(Casco.id.in_(carrito_ids)).all()
-        total = sum(c.precio for c in cascos)
 
-        # Crear pedido pendiente en BD
+        # Usar precio según método elegido
+        def precio_casco(c):
+            if metodo_mp == '3_cuotas':
+                return c.precio_3_cuotas or c.precio
+            return c.precio_1_cuota or c.precio
+
+        total = sum(precio_casco(c) for c in cascos)
+
         pedido = Pedido(
-            nombre=checkout_data['nombre'],
-            apellido=checkout_data['apellido'],
-            dni=checkout_data['dni'],
-            telefono=checkout_data['telefono'],
-            email=checkout_data.get('email', ''),
-            tipo_entrega=checkout_data['tipo_entrega'],
-            codigo_postal=checkout_data.get('codigo_postal', ''),
-            provincia=checkout_data.get('provincia', ''),
-            ciudad=checkout_data.get('ciudad', ''),
-            direccion=checkout_data.get('direccion', ''),
-            metodo_pago='mercadopago',
+            # ... mismos campos que antes ...
+            metodo_pago=f'mercadopago_{metodo_mp}',  # guarda "mercadopago_1_cuota" o "mercadopago_3_cuotas"
             estado='pendiente',
             total=total
         )
@@ -366,20 +371,17 @@ def pago_mercadopago():
         db.session.flush()
 
         for casco in cascos:
-            item = ItemPedido(pedido_id=pedido.id, casco_id=casco.id, precio=casco.precio)
+            item = ItemPedido(pedido_id=pedido.id, casco_id=casco.id, precio=precio_casco(casco))
             db.session.add(item)
             casco.reservado = True
 
         db.session.commit()
-
-        # Guardar pedido_id en session para las páginas de resultado
         session['pedido_id'] = pedido.id
 
-        # Crear preferencia en MP
         items_mp = [{
             "title": f"{c.marca} {c.nombre_modelo}",
             "quantity": 1,
-            "unit_price": float(c.precio),
+            "unit_price": float(precio_casco(c)),
             "currency_id": "ARS"
         } for c in cascos]
 

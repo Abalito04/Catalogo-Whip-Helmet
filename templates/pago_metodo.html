@@ -7,29 +7,41 @@
 
     <div class="metodos-pago">
 
-        <!-- MercadoPago -->
-        <form action="{{ url_for('pago_mercadopago') }}" method="POST" class="metodo-card">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <div class="metodo-icono">💳</div>
-            <h3>MercadoPago</h3>
-            <p>Pagá con tarjeta de crédito, débito o dinero en cuenta de MP</p>
-            <button type="submit" class="btn-metodo btn-mp">Pagar con MercadoPago</button>
-        </form>
-
-        <!-- Transferencia -->
+        <!-- Transferencia / Efectivo -->
         <form action="{{ url_for('pago_transferencia') }}" method="POST" class="metodo-card">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div class="metodo-icono">🏦</div>
-            <h3>Transferencia / CVU</h3>
-            <p>Transferí desde tu banco o billetera virtual y enviá el comprobante por WhatsApp</p>
+            <h3>Transferencia / Efectivo</h3>
+            <p>Transferí desde tu banco o pagá en efectivo y enviá el comprobante por WhatsApp</p>
+            <p class="precio-metodo"><strong>${{ "%.2f"|format(total_efectivo) }}</strong></p>
             <button type="submit" class="btn-metodo btn-transferencia">Pagar con Transferencia</button>
         </form>
 
-    </div>
+        <!-- MP 1 Pago -->
+        <form action="{{ url_for('pago_mercadopago') }}" method="POST" class="metodo-card">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="metodo_mp" value="1_cuota">
+            <div class="metodo-icono">💳</div>
+            <h3>MercadoPago — 1 Pago</h3>
+            <p>Pagá con tarjeta o dinero en cuenta en un solo pago</p>
+            <p class="precio-metodo"><strong>${{ "%.2f"|format(total_1_cuota) }}</strong></p>
+            <button type="submit" class="btn-metodo btn-mp">Pagar 1 cuota</button>
+        </form>
 
-    <div class="total-pago">
-        <span>Total a pagar:</span>
-        <strong>${{ "%.2f"|format(total) }}</strong>
+        <!-- MP 3 Pagos -->
+        <form action="{{ url_for('pago_mercadopago') }}" method="POST" class="metodo-card">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="metodo_mp" value="3_cuotas">
+            <div class="metodo-icono">📅</div>
+            <h3>MercadoPago — 3 Cuotas</h3>
+            <p>Financiá en 3 cuotas con tarjeta de crédito</p>
+            <p class="precio-metodo">
+                <strong>${{ "%.2f"|format(total_3_cuotas) }}</strong>
+                <small>(3 x ${{ "%.2f"|format(total_3_cuotas / 3) }})</small>
+            </p>
+            <button type="submit" class="btn-metodo btn-mp btn-cuotas">Pagar en 3 cuotas</button>
+        </form>
+
     </div>
 
     <a href="{{ url_for('checkout') }}" class="btn-volver">← Volver</a>
