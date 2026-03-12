@@ -258,16 +258,13 @@ def elegir_pago():
     cascos = Casco.query.filter(Casco.id.in_(carrito_ids)).all()
 
     total_efectivo = sum(c.precio for c in cascos)
-    total_1_cuota  = sum(c.precio_1_cuota or c.precio for c in cascos)
-    total_3_cuotas = sum(c.precio_3_cuotas or c.precio for c in cascos)
+    total_lista    = sum(c.precio_1_cuota or c.precio for c in cascos)
 
     return render_template('pago_metodo.html',
             cascos=cascos,
             checkout_data=checkout_data,
             total_efectivo=total_efectivo,
-            total_1_cuota=total_1_cuota,
-            total_3_cuotas=total_3_cuotas)
-
+            total_lista=total_lista)
 
 # -------------------------------------------------------
 # PAGO CON TRANSFERENCIA
@@ -385,9 +382,8 @@ def pago_mercadopago():
         cascos = Casco.query.filter(Casco.id.in_(carrito_ids)).all()
 
         def precio_casco(c):
-            if metodo_mp == '3_cuotas':
-                return c.precio_3_cuotas or c.precio
-            return c.precio_1_cuota or c.precio
+            return c.precio_1_cuota or c.precio  # igual para 1_cuota y 3_cuotas
+
 
         total = sum(precio_casco(c) for c in cascos)
 
