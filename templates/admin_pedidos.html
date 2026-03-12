@@ -24,7 +24,18 @@
                 <span class="pedido-id">#{{ pedido.id }}</span>
                 <span class="pedido-estado badge-estado-{{ pedido.estado }}">{{ pedido.estado|upper }}</span>
                 <span class="pedido-fecha">{{ pedido.fecha.strftime('%d/%m/%Y %H:%M') }}</span>
-                <span class="pedido-metodo">{{ pedido.metodo_pago|upper }}</span>
+                <span class="pedido-metodo">
+                    {% if pedido.metodo_pago == 'transferencia' %}
+                        🏦 Transferencia / Efectivo
+                    {% elif pedido.metodo_pago == 'mp_1_cuota' %}
+                        💳 MercadoPago — 1 Pago
+                    {% elif pedido.metodo_pago == 'mp_3_cuotas' %}
+                        📅 MercadoPago — 3 Cuotas
+                    {% else %}
+                        {{ pedido.metodo_pago|upper }}
+                    {% endif %}
+                </span>
+                
             </div>
 
             <div class="pedido-body">
