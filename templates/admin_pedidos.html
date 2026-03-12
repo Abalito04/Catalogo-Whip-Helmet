@@ -27,15 +27,14 @@
                 <span class="pedido-metodo">
                     {% if pedido.metodo_pago == 'transferencia' %}
                         🏦 Transferencia / Efectivo
-                    {% elif pedido.metodo_pago == 'mp_1_cuota' %}
-                        💳 MercadoPago — 1 Pago
-                    {% elif pedido.metodo_pago == 'mp_3_cuotas' %}
-                        📅 MercadoPago — 3 Cuotas
+                    {% elif pedido.metodo_pago == 'mercadopago' %}
+                        💳 MercadoPago
                     {% else %}
                         {{ pedido.metodo_pago|upper }}
                     {% endif %}
+
                 </span>
-                
+
             </div>
 
             <div class="pedido-body">

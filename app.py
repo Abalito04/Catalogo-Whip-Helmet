@@ -266,6 +266,7 @@ def elegir_pago():
             total_efectivo=total_efectivo,
             total_lista=total_lista)
 
+
 # -------------------------------------------------------
 # PAGO CON TRANSFERENCIA
 # -------------------------------------------------------

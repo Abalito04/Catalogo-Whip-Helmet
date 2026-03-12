@@ -32,28 +32,17 @@
             <button type="submit" class="btn-metodo btn-transferencia">Pagar con Transferencia</button>
         </form>
 
-        <!-- MP 1 Pago -->
+             <!-- MP -->
         <form action="{{ url_for('pago_mercadopago') }}" method="POST" class="metodo-card">
             {{ campos_checkout() }}
             <input type="hidden" name="metodo_mp" value="1_cuota">
             <div class="metodo-icono">💳</div>
-            <h3>MercadoPago — 1 Pago</h3>
+            <h3>MercadoPago — Hasta 3 Cuotas Sin Interés</h3>
+            <p>Pagá con tarjeta de crédito, débito o dinero en cuenta</p>
             <p class="precio-metodo"><strong>${{ "%.2f"|format(total_lista) }}</strong></p>
-            <button type="submit" class="btn-metodo btn-mp">Pagar en 1 cuota</button>
+            <button type="submit" class="btn-metodo btn-mp">Pagar con MercadoPago</button>
         </form>
-
-        <!-- MP 3 Cuotas sin interés -->
-        <form action="{{ url_for('pago_mercadopago') }}" method="POST" class="metodo-card">
-            {{ campos_checkout() }}
-            <input type="hidden" name="metodo_mp" value="3_cuotas">
-            <div class="metodo-icono">📅</div>
-            <h3>MercadoPago — 3 Cuotas</h3>
-            <p class="precio-metodo">
-                <strong>3 x ${{ "%.2f"|format(total_lista / 3) }}</strong>
-                <small>Sin interés · Total ${{ "%.2f"|format(total_lista) }}</small>
-            </p>
-            <button type="submit" class="btn-metodo btn-mp btn-cuotas">Pagar en 3 cuotas</button>
-        </form>
+        
 
 
     <a href="{{ url_for('checkout') }}" class="btn-volver">← Volver</a>
