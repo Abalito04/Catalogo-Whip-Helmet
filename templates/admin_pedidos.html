@@ -87,11 +87,6 @@
                     </button>
                 </form>
 
-                <form action="/admin/reset-pedidos" method="POST">
-                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                    <button type="submit" onclick="return confirm('⚠️ ¿Borrar TODOS los pedidos?')">🗑️ Resetear pedidos</button>
-                </form>
-
             </div>
 
         </div>
