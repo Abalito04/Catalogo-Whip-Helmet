@@ -419,6 +419,21 @@ main {
     margin-top: 10px;
 }
 
+.cuotas-card {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.precio-cuotas {
+    font-size: 13px;
+    color: #555;
+    font-weight: 600;
+    margin: 0;
+}
+
+
 
 /* Sin resultados */
 .sin-resultados {
