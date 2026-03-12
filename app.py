@@ -837,6 +837,16 @@ def eliminar_casco(casco_id):
         flash(f'Error al eliminar: {str(e)}', 'error')
     return redirect(url_for('admin_panel'))
 
+@app.route('/admin/reset-pedidos', methods=['POST'])
+@login_required
+def reset_pedidos():
+    db.session.execute(db.text('TRUNCATE TABLE items_pedido RESTART IDENTITY CASCADE'))
+    db.session.execute(db.text('TRUNCATE TABLE pedidos RESTART IDENTITY CASCADE'))
+    db.session.commit()
+    flash('Pedidos eliminados y IDs reiniciados.', 'success')
+    return redirect(url_for('admin_pedidos'))
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
