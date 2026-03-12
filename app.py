@@ -837,17 +837,13 @@ def eliminar_casco(casco_id):
         flash(f'Error al eliminar: {str(e)}', 'error')
     return redirect(url_for('admin_panel'))
 
-@app.route('/admin/reset-pedidos', methods=['POST'])
+@app.route('/admin/liberar-cascos', methods=['POST'])
 @login_required
-def reset_pedidos():
-    # Liberar todos los cascos reservados primero
+def liberar_cascos():
     db.session.execute(db.text('UPDATE cascos SET reservado = FALSE'))
-    # Luego borrar pedidos
-    db.session.execute(db.text('TRUNCATE TABLE items_pedido RESTART IDENTITY CASCADE'))
-    db.session.execute(db.text('TRUNCATE TABLE pedidos RESTART IDENTITY CASCADE'))
     db.session.commit()
-    flash('Pedidos eliminados y cascos liberados.', 'success')
-    return redirect(url_for('admin_pedidos'))
+    flash('Todos los cascos liberados.', 'success')
+    return redirect(url_for('admin_panel'))
 
 
 
