@@ -90,8 +90,8 @@
                 {% if casco.precio_1_cuota %}
                 <div class="precio-tarjeta">
                     <span class="precio-label">💳 Con tarjeta</span>
-                    <span class="precio-cuota">1 pago de ${{ "{:,.0f}".format(casco.precio_1_cuota) }}</span>
-                    <span class="precio-cuota">3 cuotas sin interés de ${{ "{:,.0f}".format(casco.precio_1_cuota / 3) }}</              span>
+                    <span class="precio-cuota">💳 Precio de lista: ${{ "{:,.0f}".format(casco.precio_1_cuota) }}</span>
+                    <span class="precio-cuota">3 cuotas sin interés de ${{ "{:,.0f}".format(casco.precio_1_cuota / 3) }}</span>
                 </div>
                 {% endif %}
 
