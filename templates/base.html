@@ -5,45 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}WHIP-HELMETS{% endblock %}</title>
-<!-- Google Fonts -->
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-
- 
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <header>
-       <nav class="navbar">
-    <div class="navbar-content">
-        <a href="{{ url_for('index') }}" class="logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WHIP-HELMETS">
-            <span>WHIP-HELMETS</span>
-        </a>
-        <div class="nav-links">
-            <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="instagram-btn">
-                📸 Instagram
-            </a>
-            <a href="https://wa.me/542954544001" target="_blank" class="whatsapp-btn">
-                💬 WhatsApp
-            </a>
-            <a href="{{ url_for('ver_carrito') }}" class="nav-carrito">
-                🛒 {% if get_carrito_count() > 0 %}({{ get_carrito_count() }}){% endif %}
-            </a>
-            {% if current_user.is_authenticated %}
-            <a href="{{ url_for('admin_pedidos') }}" class="admin-btn">
-                📋 Pedidos
-            </a>
-            <a href="{{ url_for('admin_panel') }}" class="admin-btn authenticated">
-                ⚙️ Admin
-            </a>
-            {% else %}
-        </div>
-    </div>
-</nav>
-
+        <nav class="navbar">
+            <div class="navbar-content">
+                <a href="{{ url_for('index') }}" class="logo">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WHIP-HELMETS">
+                    <span>WHIP-HELMETS</span>
+                </a>
+                <div class="nav-links">
+                    <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="instagram-btn">
+                        📸 Instagram
+                    </a>
+                    <a href="https://wa.me/542954544001" target="_blank" class="whatsapp-btn">
+                        💬 WhatsApp
+                    </a>
+                    <a href="{{ url_for('ver_carrito') }}" class="nav-carrito">
+                        🛒 {% if get_carrito_count() > 0 %}({{ get_carrito_count() }}){% endif %}
+                    </a>
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('admin_pedidos') }}" class="admin-btn">📋 Pedidos</a>
+                    <a href="{{ url_for('admin_panel') }}" class="admin-btn authenticated">⚙️ Admin</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
     </header>
 
     <main class="container">
@@ -54,27 +46,23 @@
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        
         {% block content %}{% endblock %}
     </main>
 
-
     <footer>
-    <p>&copy; 2026 WHIP-HELMETS. Todos los derechos reservados.</p>
-    <p>
-        <a href="https://instagram.com/whip.helmets" style="color: #ffd700;">Instagram</a> | 
-        <a href="https://wa.me/542954544001" style="color: #ffd700;">WhatsApp</a>
-        {% if current_user.is_authenticated %}
-        | <a href="{{ url_for('admin_panel') }}" style="color: #ffd700;">Panel Admin</a>
-        | <a href="{{ url_for('logout') }}" style="color: #ffd700;">Cerrar Sesión</a>
-        {% else %}
-        | <a href="{{ url_for('login') }}" style="color: #333; font-size: 11px;">·</a>
-        {% endif %}
-    </p>
-</footer>
-
+        <p>&copy; 2026 WHIP-HELMETS. Todos los derechos reservados.</p>
+        <p>
+            <a href="https://instagram.com/whip.helmets" style="color: #ffd700;">Instagram</a> | 
+            <a href="https://wa.me/542954544001" style="color: #ffd700;">WhatsApp</a>
+            {% if current_user.is_authenticated %}
+            | <a href="{{ url_for('admin_panel') }}" style="color: #ffd700;">Panel Admin</a>
+            | <a href="{{ url_for('logout') }}" style="color: #ffd700;">Cerrar Sesión</a>
+            {% else %}
+            | <a href="{{ url_for('login') }}" style="color: #333; font-size: 11px;">·</a>
+            {% endif %}
+        </p>
+    </footer>
 
 </body>
 </html>
-
 
