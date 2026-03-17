@@ -42,11 +42,12 @@
             {% else %}
             <!-- Dropdown sutil en navbar -->
     <div class="user-menu">
-        <button class="user-toggle">👤</button>
-        <div class="user-dropdown">
-            <a href="{{ url_for('login') }}">🔧 Panel Admin</a>
-        </div>
+    <button class="user-toggle" title="Admin">👤</button>
+    <div class="user-dropdown">
+        <a href="{{ url_for('login') }}">🔧 Panel Admin</a>
     </div>
+</div>
+
             {% endif %}
         </div>
     </div>
@@ -82,18 +83,17 @@
 </footer>
 
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-{% block scripts %}{% endblock %}
-
+ <script>
 document.querySelector('.user-toggle').addEventListener('click', function(e) {
     e.stopPropagation();
     const dropdown = document.querySelector('.user-dropdown');
     dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
 });
-
 document.addEventListener('click', function() {
     document.querySelector('.user-dropdown').style.display = 'none';
 });
+</script>
+
 
 </body>
 </html>
