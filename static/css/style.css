@@ -2318,6 +2318,7 @@ footer a {
 
 .user-menu {
     position: relative;
+    order: 3;
 }
 
 .user-toggle {

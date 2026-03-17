@@ -41,7 +41,7 @@
             </a>
             {% else %}
             <!-- Dropdown sutil en navbar -->
-    <div class="user-menu">
+<div class="user-menu">
     <button class="user-toggle" title="Admin">👤</button>
     <div class="user-dropdown">
         <a href="{{ url_for('login') }}">🔧 Panel Admin</a>
@@ -83,7 +83,7 @@
 </footer>
 
 
- <script>
+<script>
 document.querySelector('.user-toggle').addEventListener('click', function(e) {
     e.stopPropagation();
     const dropdown = document.querySelector('.user-dropdown');
