@@ -2338,17 +2338,17 @@ footer a {
 
 .user-dropdown {
     display: none;
-    position: absolute;
-    right: 0;
-    top: 100%;
-    margin-top: 10px;
+    position: fixed;        /* ← fixed en vez de absolute */
+    right: 20px;
+    top: 80px;              /* ← distancia desde arriba de la pantalla */
     background: #2a2a2a;
     border-radius: 8px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     min-width: 160px;
-    z-index: 1000;
+    z-index: 9999;          /* ← z-index alto para que no quede tapado */
     border: 1px solid #444;
 }
+
 
 .user-dropdown a {
     display: block;
