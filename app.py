@@ -64,9 +64,9 @@ with app.app_context():
     except Exception as e:
         db.session.rollback()
         print(f"❌ Error migración: {e}")
-        
         db.session.execute(db.text("ALTER TABLE cascos ALTER COLUMN talle TYPE VARCHAR(50)"))
         db.session.execute(db.text("ALTER TABLE cascos ALTER COLUMN condicion TYPE VARCHAR(20)"))
+        
 
     
     # Verificar que existen
