@@ -1,7 +1,9 @@
 <!-- templates/index.html -->
 {% extends "base.html" %}
 
+
 {% block title %}Catálogo - WHIP-HELMETS{% endblock %}
+
 
 {% block content %}
 <div class="catalogo-wrapper">
@@ -12,54 +14,55 @@
             <h3>Filtrar por:</h3>
             <button id="btn-cerrar-filtros" class="btn-cerrar-filtros">&times;</button>
         </div>
-        
+       
         <!-- Título desktop (se oculta en móvil) -->
         <h3 class="filtros-titulo-desktop">Filtrar por:</h3>
-        
+       
         <div class="filtro-grupo">
             <h4>Condición</h4>
-            <a href="{{ url_for('index', condicion='nuevo', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}" 
+            <a href="{{ url_for('index', condicion='nuevo', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
                class="filtro-btn {% if filtro_actual.condicion == 'nuevo' %}active{% endif %}">
                 🟢 Nuevos
             </a>
-            <a href="{{ url_for('index', condicion='usado', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}" 
+            <a href="{{ url_for('index', condicion='usado', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
                class="filtro-btn {% if filtro_actual.condicion == 'usado' %}active{% endif %}">
                 🟡 Usados
             </a>
-            <a href="{{ url_for('index', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}" 
+            <a href="{{ url_for('index', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
                class="filtro-btn">
                 Todos
             </a>
         </div>
-    
+   
         {% if tipos %}
         <div class="filtro-grupo">
             <h4>Tipo</h4>
             {% for tipo in tipos %}
-            <a href="{{ url_for('index', condicion=filtro_actual.condicion, tipo=tipo, marca=filtro_actual.marca) }}" 
+            <a href="{{ url_for('index', condicion=filtro_actual.condicion, tipo=tipo, marca=filtro_actual.marca) }}"
                class="filtro-btn {% if filtro_actual.tipo == tipo %}active{% endif %}">
                 {{ tipo|capitalize }}
             </a>
             {% endfor %}
         </div>
         {% endif %}
-    
+   
         {% if marcas %}
         <div class="filtro-grupo">
             <h4>Marca</h4>
             {% for marca in marcas %}
-            <a href="{{ url_for('index', condicion=filtro_actual.condicion, tipo=filtro_actual.tipo, marca=marca) }}" 
+            <a href="{{ url_for('index', condicion=filtro_actual.condicion, tipo=filtro_actual.tipo, marca=marca) }}"
                class="filtro-btn {% if filtro_actual.marca == marca %}active{% endif %}">
                 {{ marca }}
             </a>
             {% endfor %}
         </div>
         {% endif %}
-    
+   
         {% if filtro_actual.condicion or filtro_actual.tipo or filtro_actual.marca %}
         <a href="{{ url_for('index') }}" class="limpiar-filtros">Limpiar filtros</a>
         {% endif %}
     </aside>
+
 
 
     <!-- Grid de Cascos -->
@@ -71,9 +74,10 @@
                 🔍 Filtros
             </button>
         </div>
-        
+       
         {% if cascos %}
         <div class="grid">
+
 
             {% for casco in cascos %}
             <article class="casco-card">
@@ -82,11 +86,11 @@
                     <span class="badge badge-{{ casco.condicion }}">
                         {{ casco.condicion|upper }}
                     </span>
-                    
+                   
                     {% if casco.destacado %}
                     <span class="badge badge-destacado">⭐ DESTACADO</span>
                     {% endif %}
-                    
+                   
                     <!-- Imagen -->
                     <div class="casco-imagen">
                         {% if casco.imagen_principal %}
@@ -96,20 +100,20 @@
                         <div class="sin-imagen">Sin imagen</div>
                         {% endif %}
                     </div>
-                    
+                   
                     <!-- Info -->
                     <div class="casco-info">
                         <h3>{{ casco.marca }}</h3>
                         <p class="modelo">{{ casco.nombre_modelo }}</p>
-                        
+                       
                         {% if casco.talle %}
                         <p class="talle">Talle: {{ casco.talle }}</p>
                         {% endif %}
-                        
+                       
                         {% if casco.color %}
                         <p class="color">Color: {{ casco.color }}</p>
                         {% endif %}
-                        
+                       
                         <p class="precio">${{ "{:,.0f}".format(casco.precio) }}</p>
                         <p class="precio-etiqueta">💵 EFECTIVO / TRANSFERENCIA</p>
                         <div class="cuotas-card">
@@ -118,6 +122,7 @@
                         <p class="precio-cuotas">📅 3 Cuotas sin Interés: ${{ "{:,.0f}".format(casco.precio_1_cuota / 3) }}</p>
                         {% endif %}
                     </div>
+
 
 
 

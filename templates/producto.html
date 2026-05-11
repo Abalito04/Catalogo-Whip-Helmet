@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
+
 {% block title %}{{ casco.marca }} {{ casco.nombre_modelo }} - WHIP-HELMETS{% endblock %}
 
+
 {% block content %}
+
 
 <div class="producto-detalle">
     <!-- Breadcrumb -->
@@ -10,34 +13,37 @@
         <a href="{{ url_for('index') }}">← Volver al catálogo</a>
     </nav>
 
+
             <!-- Galería de imágenes - REESTRUCTURADA -->
         <div class="producto-galeria">
             <!-- Imagen Principal -->
             <div class="imagen-principal" onclick="abrirLightbox()">
                 {% if casco.imagen_principal %}
-                <img id="imagen-main" src="{{ casco.imagen_principal }}" 
+                <img id="imagen-main" src="{{ casco.imagen_principal }}"
                      alt="{{ casco.marca }} {{ casco.nombre_modelo }}">
                 {% else %}
                 <div class="sin-imagen-grande">Sin imagen disponible</div>
                 {% endif %}
             </div>
 
+
             <!-- Miniaturas -->
             {% if casco.imagenes_adicionales %}
             <div class="imagenes-thumbnails">
-                <img class="thumbnail active" 
+                <img class="thumbnail active"
                      src="{{ casco.imagen_principal }}"
                      onclick="cambiarImagen(this.src)"
                      alt="Vista 1">
-                
+               
                 {% for img in casco.get_imagenes_lista() %}
-                <img class="thumbnail" 
+                <img class="thumbnail"
                      src="{{ img }}"
                      onclick="cambiarImagen(this.src)"
                      alt="Vista {{ loop.index + 1 }}">
                 {% endfor %}
             </div>
             {% endif %}
+
 
             <!-- Botón Instagram -->
             {% if casco.instagram_url %}
@@ -47,20 +53,21 @@
             {% endif %}
         </div>
 
+
 <!-- Lightbox FUERA de la galería -->
 <div id="lightbox" class="lightbox" onclick="cerrarLightbox(event)">
     <span class="lightbox-close" onclick="cerrarLightbox(event)">&times;</span>
-    
+   
     <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation(); cambiarImagenLightbox(-1)">
         ❮
     </button>
-    
+   
     <img class="lightbox-content" id="lightbox-img" alt="Imagen ampliada">
-    
+   
     <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation(); cambiarImagenLightbox(1)">
         ❯
     </button>
-    
+   
     <div class="lightbox-counter" id="lightbox-counter"></div>
 </div>
     <div class="producto-contenido">
@@ -76,9 +83,11 @@
                 {% endif %}
             </div>
 
+
             <!-- Título y marca -->
             <h1>{{ casco.marca }}</h1>
             <h2 class="modelo-titulo">{{ casco.nombre_modelo }}</h2>
+
 
             <!-- Precio -->
             <div class="bloque-precios">
@@ -86,13 +95,14 @@
                     <span class="precio-label">💵 Efectivo / Transferencia</span>
                     <span class="precio-grande">${{ "{:,.0f}".format(casco.precio) }}</span>
                 </div>
-            
+           
                 {% if casco.precio_1_cuota %}
                 <div class="precio-tarjeta">
                     <span class="precio-cuota">💳 Precio de lista: ${{ "{:,.0f}".format(casco.precio_1_cuota) }}</span>
                     <span class="precio-cuota">💳 3 cuotas sin interés de ${{ "{:,.0f}".format(casco.precio_1_cuota / 3) }}</span>
                 </div>
                 {% endif %}
+
 
 
 
@@ -103,17 +113,17 @@
                     {% if casco.tipo %}
                     <li><strong>Tipo:</strong> {{ casco.tipo|capitalize }}</li>
                     {% endif %}
-                    
+                   
                     {% if casco.talle %}
                     <li><strong>Talle:</strong> {{ casco.talle }}</li>
                     {% endif %}
-                    
+                   
                     {% if casco.color %}
                     <li><strong>Color:</strong> {{ casco.color }}</li>
                     {% endif %}
-                    
+                   
                     <li><strong>Condición:</strong> {{ casco.condicion|capitalize }}</li>
-                    <li><strong>Disponibilidad:</strong> 
+                    <li><strong>Disponibilidad:</strong>
                         {% if casco.disponible %}
                         <span class="disponible">✓ Disponible</span>
                         {% else %}
@@ -123,6 +133,7 @@
                 </ul>
             </div>
 
+
             <!-- Descripción -->
             {% if casco.descripcion %}
             <div class="descripcion">
@@ -130,6 +141,7 @@
                 <p>{{ casco.descripcion }}</p>
             </div>
             {% endif %}
+
 
             <!-- BOTONES SECUNDARIOS - ACÁ EN PRODUCTO-INFO -->
                         <!-- BOTONES SECUNDARIOS - ACÁ EN PRODUCTO-INFO -->
@@ -144,23 +156,25 @@
             <div class="btn-no-disponible">✗ No disponible</div>
             {% endif %}
 
+
             <div class="botones-info">
                 <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="btn-instagram">
                     📸 Visitar nuestro Instagram
                 </a>
-                
-                <a href="https://wa.me/542954544001?text=Hola!%20Me%20interesa%20el%20casco%20{{ casco.marca }}%20{{ casco.nombre_modelo }}" 
+               
+                <a href="https://wa.me/542954544001?text=Hola!%20Me%20interesa%20el%20casco%20{{ casco.marca }}%20{{ casco.nombre_modelo }}"
                    target="_blank" class="btn-whatsapp">
                     💬 Consultar por WhatsApp
                 </a>
             </div>
+
 
         </div>
     </div>
 </div>
 {% endblock %}
 
+
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/producto.js') }}"></script>
 {% endblock %}
-
