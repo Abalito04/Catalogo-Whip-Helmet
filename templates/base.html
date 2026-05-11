@@ -1,14 +1,30 @@
 <!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="es">
+<!-- En base.html, reemplazá solo la parte de <head> -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}WHIP-HELMETS{% endblock %}</title>
+    
+    <title>{% block title %}WHIP-HELMETS{% endblock %} | Cascos de Motocross Argentina</title>
+    
+    <meta name="description" content="{% block meta_description %}Cascos de motocross nuevos y usados: Fox, Troy Lee Designs, Bell, Alpinestars. Envíos a todo el país.{% endblock %}">
+    
+    <meta name="keywords" content="cascos motocross, casco fox, troy lee designs, bell motocross, casco usado argentina, cascos robust, casco airoh, cascos shoei">
+    
+    <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ self.meta_description() }}{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{{ url_for('static', filename='images/logo.png', _external=True) }}">
+    
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -16,7 +32,7 @@
         <nav class="navbar">
             <div class="navbar-content">
                 <a href="{{ url_for('index') }}" class="logo">
-                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WHIP-HELMETS">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="WHIP-HELMETS - Cascos de Motocross">
                     <span>WHIP-HELMETS</span>
                 </a>
                 <div class="nav-links">
@@ -38,6 +54,7 @@
         </nav>
     </header>
 
+
     <main class="container">
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -48,6 +65,7 @@
         {% endwith %}
         {% block content %}{% endblock %}
     </main>
+
 
     <footer>
         <p>&copy; 2026 WHIP-HELMETS. Todos los derechos reservados.</p>
@@ -64,6 +82,7 @@
     </footer>
     
 {% block scripts %}{% endblock %} 
+
 
 </body>
 </html>

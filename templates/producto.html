@@ -1,8 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ casco.marca }} {{ casco.nombre_modelo }} - WHIP-HELMETS{% endblock %}
+
+{% block title %}{{ casco.marca }} {{ casco.nombre_modelo }} - {{ casco.condicion|capitalize }} | WHIP-HELMETS{% endblock %}
+
+
+{% block meta_description %}{{ casco.marca }} {{ casco.nombre_modelo }} {{ casco.condicion }}. {{ (casco.descripcion|striptags)[:150] if casco.descripcion else '' }} Precio: ${{ "{:,.0f}".format(casco.precio) }}. Envíos a todo Argentina.{% endblock %}
+
 
 {% block content %}
+
 
 <div class="producto-detalle">
     <!-- Breadcrumb -->
@@ -10,7 +16,8 @@
         <a href="{{ url_for('index') }}">← Volver al catálogo</a>
     </nav>
 
-            <!-- Galería de imágenes - REESTRUCTURADA -->
+
+          <!-- Galería de imágenes - REESTRUCTURADA -->
         <div class="producto-galeria">
             <!-- Imagen Principal -->
             <div class="imagen-principal" onclick="abrirLightbox()">
@@ -21,6 +28,7 @@
                 <div class="sin-imagen-grande">Sin imagen disponible</div>
                 {% endif %}
             </div>
+
 
             <!-- Miniaturas -->
             {% if casco.imagenes_adicionales %}
@@ -39,6 +47,7 @@
             </div>
             {% endif %}
 
+
             <!-- Botón Instagram -->
             {% if casco.instagram_url %}
             <a href="{{ casco.instagram_url }}" target="_blank" class="btn-instagram-post-galeria">
@@ -46,6 +55,7 @@
             </a>
             {% endif %}
         </div>
+
 
 <!-- Lightbox FUERA de la galería -->
 <div id="lightbox" class="lightbox" onclick="cerrarLightbox(event)">
@@ -76,9 +86,11 @@
                 {% endif %}
             </div>
 
+
             <!-- Título y marca -->
             <h1>{{ casco.marca }}</h1>
             <h2 class="modelo-titulo">{{ casco.nombre_modelo }}</h2>
+
 
             <!-- Precio -->
             <div class="bloque-precios">
@@ -93,6 +105,7 @@
                     <span class="precio-cuota">💳 3 cuotas sin interés de ${{ "{:,.0f}".format(casco.precio_1_cuota / 3) }}</span>
                 </div>
                 {% endif %}
+
 
 
 
@@ -123,6 +136,7 @@
                 </ul>
             </div>
 
+
             <!-- Descripción -->
             {% if casco.descripcion %}
             <div class="descripcion">
@@ -131,8 +145,9 @@
             </div>
             {% endif %}
 
+
             <!-- BOTONES SECUNDARIOS - ACÁ EN PRODUCTO-INFO -->
-                        <!-- BOTONES SECUNDARIOS - ACÁ EN PRODUCTO-INFO -->
+                    <!-- BOTONES SECUNDARIOS - ACÁ EN PRODUCTO-INFO -->
             {% if casco.disponible and not casco.reservado %}
             <form action="{{ url_for('agregar_al_carrito', casco_id=casco.id) }}" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -143,6 +158,7 @@
             {% else %}
             <div class="btn-no-disponible">✗ No disponible</div>
             {% endif %}
+
 
             <div class="botones-info">
                 <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="btn-instagram">
@@ -155,12 +171,42 @@
                 </a>
             </div>
 
+
         </div>
     </div>
 </div>
+
+<!-- SCHEMA.ORG DATOS ESTRUCTURADOS PARA GOOGLE -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "Product",
+  "name": "{{ casco.marca }} {{ casco.nombre_modelo }}",
+  "image": [
+    "{{ casco.imagen_principal }}"
+  ],
+  "description": "{{ (casco.descripcion|striptags)[:200] if casco.descripcion else '' }}",
+  "brand": {
+    "@type": "Brand",
+    "name": "{{ casco.marca }}"
+  },
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ request.url }}",
+    "priceCurrency": "ARS",
+    "price": "{{ casco.precio }}",
+    "availability": "{% if casco.disponible %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+    "seller": {
+      "@type": "Organization",
+      "name": "Whip Helmets"
+    }
+  }
+}
+</script>
+
 {% endblock %}
+
 
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/producto.js') }}"></script>
 {% endblock %}
-
