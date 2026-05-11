@@ -1,30 +1,40 @@
 <!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="es">
-<!-- En base.html, reemplazá solo la parte de <head> -->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0>
     
+    <!-- TÍTULO DINÁMICO -->
     <title>{% block title %}WHIP-HELMETS{% endblock %} | Cascos de Motocross Argentina</title>
     
+    <!-- META DESCRIPTION -->
     <meta name="description" content="{% block meta_description %}Cascos de motocross nuevos y usados: Fox, Troy Lee Designs, Bell, Alpinestars. Envíos a todo el país.{% endblock %}">
     
+    <!-- META KEYWORDS -->
     <meta name="keywords" content="cascos motocross, casco fox, troy lee designs, bell motocross, casco usado argentina, cascos robust, casco airoh, cascos shoei">
     
+    <!-- OPEN GRAPH PARA REDES SOCIALES -->
     <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ self.meta_description() }}{% endblock %}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.url }}">
+    {% if block_og_image is defined and block_og_image %}
+    <meta property="og:image" content="{{ block_og_image }}">
+    {% else %}
     <meta property="og:image" content="{{ url_for('static', filename='images/logo.png', _external=True) }}">
+    {% endif %}
     
+    <!-- FAVICON -->
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     
+    <!-- GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet>
     
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>

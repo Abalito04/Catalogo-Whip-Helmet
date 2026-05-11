@@ -1,38 +1,12 @@
 <!-- templates/index.html -->
 {% extends "base.html" %}
 
-
 {% block title %}Catálogo - WHIP-HELMETS{% endblock %}
-
-
-{% block meta_description %}Cascos de motocross nuevos y usados en Argentina: Fox, Troy Lee Designs, Bell, Alpinestars, Shoei. Encontrá tu casco ideal con los mejores precios.{% endblock %}
-
 
 {% block content %}
 <div class="catalogo-wrapper">
-    
-    <!-- TEXTO SEO PARA EL HOME -->
-    <section class="hero-seo">
-        <div class="container">
-            <h1>Cascos de Motocross en Argentina</h1>
-            <p>
-                Whip Helmets es tu tienda de cascos de motocross nuevos y usados en el país. 
-                Encontrá las mejores marcas: <strong>Fox Racing</strong>, <strong>Troy Lee Designs</strong>, 
-                <strong>Bell</strong>, <strong>Alpinestars</strong>, <strong>Shoei</strong>, 
-                <strong>Airoh</strong>, <strong>6D</strong> y más.
-            </p>
-            <p>
-                Tenemos cascos de <strong>motocross</strong>, <strong>downhill</strong> y <strong>BMX</strong>. 
-                Cascos nuevos en caja y usados en excelente condición. 
-                <strong>Envíos a todo Argentina</strong> o retiro en Perico, Jujuy.
-            </p>
-        </div>
-    </section>
-    <!-- FIN TEXTO SEO -->
-
-
     <!-- Sidebar de Filtros -->
-    <aside class="filtros" id="filtros-sidebar">
+        <aside class="filtros" id="filtros-sidebar">
         <!-- Header móvil con botón cerrar -->
         <div class="filtros-header-mobile">
             <h3>Filtrar por:</h3>
@@ -57,7 +31,7 @@
                 Todos
             </a>
         </div>
-
+    
         {% if tipos %}
         <div class="filtro-grupo">
             <h4>Tipo</h4>
@@ -69,7 +43,7 @@
             {% endfor %}
         </div>
         {% endif %}
-
+    
         {% if marcas %}
         <div class="filtro-grupo">
             <h4>Marca</h4>
@@ -81,12 +55,11 @@
             {% endfor %}
         </div>
         {% endif %}
-
+    
         {% if filtro_actual.condicion or filtro_actual.tipo or filtro_actual.marca %}
         <a href="{{ url_for('index') }}" class="limpiar-filtros">Limpiar filtros</a>
         {% endif %}
     </aside>
-
 
 
     <!-- Grid de Cascos -->
@@ -101,7 +74,6 @@
         
         {% if cascos %}
         <div class="grid">
-
 
             {% for casco in cascos %}
             <article class="casco-card">
@@ -150,7 +122,6 @@
 
 
 
-
                     </div>
                 </a>
             </article>
@@ -164,31 +135,4 @@
         {% endif %}
     </section>
 </div>
-
-<!-- CSS para el texto SEO -->
-<style>
-.hero-seo {
-    padding: 25px 20px;
-    margin-bottom: 20px;
-    border-left: 3px solid #ffd700;  /* Línea dorada sutil */
-    background: transparent;  /* SIN FONDO */
-}
-.hero-seo h1 {
-    color: #1a1a1a;
-    font-size: 1.8rem;
-    margin-bottom: 12px;
-    text-align: center;
-}
-.hero-seo p {
-    color: #6c757d;  /* Gris un poco más oscuro */
-    line-height: 1.6;
-    font-size: 1rem;
-    margin-bottom: 12px;
-    text-align: center;
-    max-width: 700px;
-    margin-left: auto;
-    margin-right: auto;
-}
-</style>
-
 {% endblock %}
