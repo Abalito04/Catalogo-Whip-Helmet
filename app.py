@@ -80,32 +80,32 @@ with app.app_context():
 # -------------------------------------------------------
 # REMBG
 # -------------------------------------------------------
-def remover_fondo_rembg(file):
-    try:
-        from rembg import remove
-        print("🪄 Removiendo fondo con rembg...")
-        img_bytes = file.read()
-        file.seek(0)
-        img_sin_fondo = remove(img_bytes)
-        print("✅ Fondo removido correctamente")
-        return img_sin_fondo, None
-    except Exception as e:
-        print(f"❌ Error removiendo fondo: {e}")
-        return None, str(e)
+#def remover_fondo_rembg(file):
+#    try:
+#        from rembg import remove
+#        print("🪄 Removiendo fondo con rembg...")
+#        img_bytes = file.read()
+#        file.seek(0)
+#        img_sin_fondo = remove(img_bytes)
+#        print("✅ Fondo removido correctamente")
+#        return img_sin_fondo, None
+#    except Exception as e:
+#        print(f"❌ Error removiendo fondo: {e}")
+#        return None, str(e)
+#
+#
+#def precargar_modelo_rembg():
+#    try:
+#        print("⏳ Pre-cargando modelo rembg...")
+#        from rembg import new_session
+#        new_session("u2net")
+#        print("✅ Modelo rembg listo")
+#    except Exception as e:
+#        print(f"⚠️ No se pudo pre-cargar rembg: {e}")
 
 
-def precargar_modelo_rembg():
-    try:
-        print("⏳ Pre-cargando modelo rembg...")
-        from rembg import new_session
-        new_session("u2net")
-        print("✅ Modelo rembg listo")
-    except Exception as e:
-        print(f"⚠️ No se pudo pre-cargar rembg: {e}")
-
-
-import threading
-threading.Thread(target=precargar_modelo_rembg, daemon=True).start()
+#import threading
+#threading.Thread(target=precargar_modelo_rembg, daemon=True).start()
 
 
 
