@@ -10,10 +10,12 @@ import cloudinary
 import cloudinary.uploader
 from functools import wraps
 from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'clave-local-de-desarrollo')
+app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024
 csrf = CSRFProtect(app)
 
 limiter = Limiter(
@@ -112,16 +114,58 @@ with app.app_context():
 # -------------------------------------------------------
 # HELPER: subir imagen con o sin rembg
 # -------------------------------------------------------
+EXTENSIONES_IMAGEN = {'jpg', 'jpeg', 'png', 'webp'}
+MAX_IMAGENES_POR_CASCO = 6
+
+
+def archivo_imagen_valido(file):
+    extension = file.filename.rsplit('.', 1)[-1].lower() if '.' in file.filename else ''
+    return extension in EXTENSIONES_IMAGEN and file.mimetype in {
+        'image/jpeg', 'image/png', 'image/webp'
+    }
+
+
 def subir_imagen(file, aplicar_rembg=False):
-    if aplicar_rembg:
-        img_procesada, error = remover_fondo_rembg(file)
-        if img_procesada:
-            return cloudinary.uploader.upload(
-                img_procesada, folder="whip-helmets", timeout=60, format="png"
-            )
-        else:
-            flash(f'No se pudo remover el fondo: {error}. Se subió la imagen original.', 'warning')
-    return cloudinary.uploader.upload(file, folder="whip-helmets", timeout=60)
+    #if aplicar_rembg:
+    #    img_procesada, error = remover_fondo_rembg(file)
+    #    if img_procesada:
+    #        return cloudinary.uploader.upload(
+    #            img_procesada, folder="whip-helmets", timeout=60, format="png"
+    #        )
+    #    else:
+    #        flash(f'No se pudo remover el fondo: {error}. Se subió la imagen original.', 'warning')
+    return cloudinary.uploader.upload(
+        file,
+        folder="whip-helmets",
+        resource_type="image",
+        timeout=35,
+    )
+
+
+def subir_imagenes(files, aplicar_rembg=False):
+    files = [file for file in files if file and file.filename]
+    if not files:
+        return []
+    if len(files) > MAX_IMAGENES_POR_CASCO:
+        raise ValueError(f'Podés subir como máximo {MAX_IMAGENES_POR_CASCO} imágenes por vez.')
+    if any(not archivo_imagen_valido(file) for file in files):
+        raise ValueError('Solo se permiten imágenes JPG, PNG o WebP.')
+
+    resultados = [None] * len(files)
+    with ThreadPoolExecutor(max_workers=min(4, len(files))) as executor:
+        futuros = {
+            executor.submit(subir_imagen, file, aplicar_rembg): indice
+            for indice, file in enumerate(files)
+        }
+        for futuro in as_completed(futuros):
+            resultados[futuros[futuro]] = futuro.result()['secure_url']
+    return resultados
+
+
+@app.errorhandler(413)
+def archivo_demasiado_grande(_error):
+    flash('La carga supera los 20 MB. Reducí el tamaño o la cantidad de imágenes.', 'error')
+    return redirect(request.referrer or url_for('admin_panel'))
 
 
 # -------------------------------------------------------
@@ -590,28 +634,21 @@ def eliminar_pedido(pedido_id):
 def agregar_casco():
     if request.method == 'POST':
         aplicar_rembg = request.form.get('remover_fondo') == 'on'
-        imagen_principal_url = ''
+        principal = request.files.get('imagen_principal')
+        adicionales = request.files.getlist('imagenes_adicionales')
+        files = [principal] + adicionales
+        try:
+            imagenes_subidas = subir_imagenes(files, aplicar_rembg)
+        except ValueError as error:
+            flash(str(error), 'error')
+            return redirect(url_for('agregar_casco'))
+        except Exception as error:
+            app.logger.exception('Error al subir imágenes a Cloudinary: %s', error)
+            flash('No se pudieron subir las imágenes. Probá nuevamente con archivos más livianos.', 'error')
+            return redirect(url_for('agregar_casco'))
 
-        if 'imagen_principal' in request.files:
-            file = request.files['imagen_principal']
-            if file.filename != '':
-                try:
-                    upload_result = subir_imagen(file, aplicar_rembg)
-                    imagen_principal_url = upload_result['secure_url']
-                except Exception as e:
-                    flash(f'Error subiendo imagen: {str(e)}', 'error')
-                    return redirect(url_for('agregar_casco'))
-
-        imagenes_adicionales = []
-        if 'imagenes_adicionales' in request.files:
-            files = request.files.getlist('imagenes_adicionales')
-            for file in files:
-                if file.filename != '':
-                    try:
-                        upload_result = subir_imagen(file, aplicar_rembg)
-                        imagenes_adicionales.append(upload_result['secure_url'])
-                    except Exception as e:
-                        print(f"❌ Error subiendo imagen adicional: {e}")
+        imagen_principal_url = imagenes_subidas[0] if imagenes_subidas else ''
+        imagenes_adicionales = imagenes_subidas[1:]
 
         nuevo_casco = Casco(
             nombre_modelo=request.form['nombre_modelo'],
