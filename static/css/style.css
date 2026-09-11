@@ -1127,7 +1127,7 @@ footer a {
     .nav-links a {
         padding: 10px 16px !important;
         font-size: 13px !important;
-        flex: 1 1 calc(33% - 10px) !important;
+        flex: 1 1 calc(50% - 10px) !important;
         min-height: 40px;
         white-space: nowrap;
         display: flex;
@@ -2439,7 +2439,7 @@ footer a {
     }
     .dropdown { 
         order: 1; 
-        flex: 1 1 calc(33% - 10px) !important;
+        flex: 1 1 calc(50% - 10px) !important;
     }
     .nav-secciones-btn { 
         width: 100%; 
