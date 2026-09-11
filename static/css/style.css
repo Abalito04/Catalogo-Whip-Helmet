@@ -175,6 +175,28 @@ body {
     color: #000;
 }
 
+.nav-cascos-btn {
+    background: #dc3545;
+    color: white;
+    box-shadow: 0 3px 10px rgba(220, 53, 69, 0.4);
+}
+.nav-cascos-btn:hover {
+    background: #c82333;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(220, 53, 69, 0.6);
+}
+
+.nav-indumentaria-btn {
+    background: #007bff;
+    color: white;
+    box-shadow: 0 3px 10px rgba(0, 123, 255, 0.4);
+}
+.nav-indumentaria-btn:hover {
+    background: #0056b3;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.6);
+}
+
 
 
 /* ==========================================
@@ -952,7 +974,8 @@ footer a {
     .nav-links {
         width: 100%;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
+        flex-wrap: wrap;
     }
    
     .nav-links a {
