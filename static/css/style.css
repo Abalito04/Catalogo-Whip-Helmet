@@ -942,7 +942,7 @@ footer a {
 @media (max-width: 768px) {
     /* Body */
     body {
-        padding-top: 290px;
+        padding-top: 330px;
     }
    
     /* Header */
@@ -2286,6 +2286,16 @@ footer a {
         max-height: 100%;
         object-fit: contain;
     }
+    /* Ordenar los botones en móvil */
+    .nav-links {
+        display: flex;
+    }
+    .nav-cascos-btn { order: 1; }
+    .nav-indumentaria-btn { order: 2; }
+    .nav-carrito { order: 3; }
+    .whatsapp-btn { order: 4; }
+    .instagram-btn { order: 5; }
+    .admin-btn { order: 6; }
 }
 
 @media (max-width: 480px) {
