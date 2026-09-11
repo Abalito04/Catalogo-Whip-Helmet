@@ -11,6 +11,7 @@ class Casco(db.Model):
     nombre_modelo = db.Column(db.String(100), nullable=False)
     marca = db.Column(db.String(50), nullable=False)
     tipo = db.Column(db.String(20))
+    categoria = db.Column(db.String(30), default='casco')
     condicion = db.Column(db.String(20), nullable=False)  # ← era String(10)
     
     precio = db.Column(db.Float, nullable=False)

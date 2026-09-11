@@ -20,15 +20,15 @@
        
         <div class="filtro-grupo">
             <h4>Condición</h4>
-            <a href="{{ url_for('index', condicion='nuevo', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
+            <a href="{{ url_for('index', categoria=request.args.get('categoria'), condicion='nuevo', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
                class="filtro-btn {% if filtro_actual.condicion == 'nuevo' %}active{% endif %}">
                 🟢 Nuevos
             </a>
-            <a href="{{ url_for('index', condicion='usado', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
+            <a href="{{ url_for('index', categoria=request.args.get('categoria'), condicion='usado', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
                class="filtro-btn {% if filtro_actual.condicion == 'usado' %}active{% endif %}">
                 🟡 Usados
             </a>
-            <a href="{{ url_for('index', tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
+            <a href="{{ url_for('index', categoria=request.args.get('categoria'), tipo=filtro_actual.tipo, marca=filtro_actual.marca) }}"
                class="filtro-btn">
                 Todos
             </a>
@@ -38,7 +38,7 @@
         <div class="filtro-grupo">
             <h4>Tipo</h4>
             {% for tipo in tipos %}
-            <a href="{{ url_for('index', condicion=filtro_actual.condicion, tipo=tipo, marca=filtro_actual.marca) }}"
+            <a href="{{ url_for('index', categoria=request.args.get('categoria'), condicion=filtro_actual.condicion, tipo=tipo, marca=filtro_actual.marca) }}"
                class="filtro-btn {% if filtro_actual.tipo == tipo %}active{% endif %}">
                 {{ tipo|capitalize }}
             </a>
@@ -50,7 +50,7 @@
         <div class="filtro-grupo">
             <h4>Marca</h4>
             {% for marca in marcas %}
-            <a href="{{ url_for('index', condicion=filtro_actual.condicion, tipo=filtro_actual.tipo, marca=marca) }}"
+            <a href="{{ url_for('index', categoria=request.args.get('categoria'), condicion=filtro_actual.condicion, tipo=filtro_actual.tipo, marca=marca) }}"
                class="filtro-btn {% if filtro_actual.marca == marca %}active{% endif %}">
                 {{ marca }}
             </a>
@@ -58,7 +58,7 @@
         </div>
         {% endif %}
    
-        {% if filtro_actual.condicion or filtro_actual.tipo or filtro_actual.marca %}
+        {% if filtro_actual.condicion or filtro_actual.tipo or filtro_actual.marca or request.args.get('categoria') %}
         <a href="{{ url_for('index') }}" class="limpiar-filtros">Limpiar filtros</a>
         {% endif %}
     </aside>

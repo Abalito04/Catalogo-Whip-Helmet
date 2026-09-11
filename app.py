@@ -60,6 +60,7 @@ with app.app_context():
     try:
         db.session.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_1_cuota FLOAT'))
         db.session.execute(db.text('ALTER TABLE cascos ADD COLUMN IF NOT EXISTS precio_3_cuotas FLOAT'))
+        db.session.execute(db.text("ALTER TABLE cascos ADD COLUMN IF NOT EXISTS categoria VARCHAR(30) DEFAULT 'casco'"))
         db.session.execute(db.text("ALTER TABLE pedidos ALTER COLUMN metodo_pago TYPE VARCHAR(30)"))  # ← acá
         db.session.commit()
         print("✅ Columnas OK")
@@ -185,9 +186,12 @@ def index():
     condicion_filtro = request.args.get('condicion')
     tipo_filtro = request.args.get('tipo')
     marca_filtro = request.args.get('marca')
+    categoria_filtro = request.args.get('categoria')
 
     query = Casco.query.filter_by(disponible=True)
 
+    if categoria_filtro:
+        query = query.filter_by(categoria=categoria_filtro)
     if condicion_filtro:
         query = query.filter_by(condicion=condicion_filtro)
     if tipo_filtro:
@@ -654,6 +658,7 @@ def agregar_casco():
             nombre_modelo=request.form['nombre_modelo'],
             marca=request.form['marca'],
             tipo=request.form['tipo'],
+            categoria=request.form.get('categoria', 'casco'),
             condicion=request.form['condicion'],
             precio=float(request.form['precio']),
             descripcion=request.form.get('descripcion', ''),
@@ -762,6 +767,7 @@ def editar_casco(casco_id):
         casco.nombre_modelo = request.form['nombre_modelo']
         casco.marca = request.form['marca']
         casco.tipo = request.form.get('tipo', '')
+        casco.categoria = request.form.get('categoria', 'casco')
         casco.condicion = request.form.get('condicion', 'nuevo')
         casco.precio = float(request.form['precio'])
         casco.descripcion = request.form.get('descripcion', '')
