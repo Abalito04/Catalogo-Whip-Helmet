@@ -217,7 +217,17 @@ body {
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    margin-top: 10px;
+    /* Padding invisible para evitar que se cierre el hover */
+    margin-top: 0;
+}
+
+.dropdown::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 15px; /* Cubre el espacio en blanco inferior */
 }
 
 .dropdown-content a {
