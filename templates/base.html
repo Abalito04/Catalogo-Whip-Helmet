@@ -21,16 +21,16 @@
                 </a>
                 <div class="nav-links">
                     <a href="{{ url_for('index', categoria='casco') }}" class="nav-cascos-btn">
-                        🏍️ Cascos
+                        Cascos
                     </a>
                     <a href="{{ url_for('index', categoria='indumentaria') }}" class="nav-indumentaria-btn">
-                        👕 Indumentaria
+                        Indumentaria
                     </a>
                     <a href="https://www.instagram.com/whip.helmets/" target="_blank" class="instagram-btn">
-                        📸 Instagram
+                        Instagram
                     </a>
                     <a href="https://wa.me/542954544001" target="_blank" class="whatsapp-btn">
-                        💬 WhatsApp
+                        WhatsApp
                     </a>
                     <a href="{{ url_for('ver_carrito') }}" class="nav-carrito">
                         🛒 {% if get_carrito_count() > 0 %}({{ get_carrito_count() }}){% endif %}
