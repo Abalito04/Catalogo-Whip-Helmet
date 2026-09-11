@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=3">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=4">
 </head>
 <body>
     <header>
@@ -33,7 +33,7 @@
                         WhatsApp
                     </a>
                     <a href="{{ url_for('ver_carrito') }}" class="nav-carrito">
-                        🛒 {% if get_carrito_count() > 0 %}({{ get_carrito_count() }}){% endif %}
+                        🛒 Carrito {% if get_carrito_count() > 0 %}({{ get_carrito_count() }}){% endif %}
                     </a>
                     {% if current_user.is_authenticated %}
                     <a href="{{ url_for('admin_pedidos') }}" class="admin-btn">📋 Pedidos</a>
