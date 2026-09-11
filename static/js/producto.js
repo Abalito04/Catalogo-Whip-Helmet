@@ -8,9 +8,18 @@ function inicializarGaleria() {
     
     // Obtener todas las imágenes de los thumbnails
     const thumbnails = document.querySelectorAll('.thumbnail');
-    thumbnails.forEach(thumb => {
-        imagenesGaleria.push(thumb.src);
-    });
+    
+    if (thumbnails.length > 0) {
+        thumbnails.forEach(thumb => {
+            imagenesGaleria.push(thumb.src);
+        });
+    } else {
+        // Si no hay thumbnails (producto con 1 sola foto), usamos la foto principal
+        const imgMain = document.getElementById('imagen-main');
+        if (imgMain) {
+            imagenesGaleria.push(imgMain.src);
+        }
+    }
 }
 
 function cambiarImagen(src) {
