@@ -71,7 +71,8 @@ body {
 
 .navbar.scrolled .logo img {
     height: 80px;
-    transition: height 0.3s ease;
+    width: 80px;
+    transition: height 0.3s ease, width 0.3s ease;
 }
 
 
@@ -99,7 +100,9 @@ body {
 
 .logo img {
     height: 150px;
-    width: auto;
+    width: 150px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 
@@ -1107,6 +1110,7 @@ footer a {
    
     .logo img {
         height: 100px !important;
+        width: 100px !important;
     }
    
     .logo span {
@@ -1339,6 +1343,7 @@ footer a {
    
     .logo img {
         height: 100px !important;
+        width: 100px !important;
     }
    
     .logo span {
