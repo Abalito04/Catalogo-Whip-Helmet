@@ -2437,8 +2437,20 @@ footer a {
     .nav-links {
         display: flex;
     }
-    .dropdown { order: 1; flex: 1 1 calc(50% - 10px); }
-    .nav-secciones-btn { width: 100%; min-height: 40px; }
+    .dropdown { 
+        order: 1; 
+        flex: 1 1 calc(33% - 10px) !important;
+    }
+    .nav-secciones-btn { 
+        width: 100%; 
+        padding: 10px 16px !important;
+        font-size: 13px !important;
+        min-height: 40px;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
     .nav-carrito { order: 2; }
     .whatsapp-btn { order: 4; }
     .instagram-btn { order: 5; }
