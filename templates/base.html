@@ -63,7 +63,8 @@
         <p>&copy; 2026 WHIP-HELMETS. Todos los derechos reservados.</p>
         <p>
             <a href="https://instagram.com/whip.helmets" style="color: #ffd700;">Instagram</a> |
-            <a href="https://wa.me/542954544001" style="color: #ffd700;">WhatsApp</a>
+            <a href="https://wa.me/542954544001" style="color: #ffd700;">WhatsApp</a> |
+            <a href="{{ url_for('legales') }}" style="color: #ffd700;">Bases y Condiciones</a>
             {% if current_user.is_authenticated %}
             | <a href="{{ url_for('admin_panel') }}" style="color: #ffd700;">Panel Admin</a>
             | <a href="{{ url_for('logout') }}" style="color: #ffd700;">Cerrar Sesión</a>

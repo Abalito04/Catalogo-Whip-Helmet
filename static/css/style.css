@@ -2512,3 +2512,59 @@ footer a {
 
 
 
+
+/* ==========================================
+   LEGALES (TÉRMINOS Y CONDICIONES)
+   ========================================== */
+.legales-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.legales-box {
+    background: #2a2a2a;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    color: #ddd;
+    line-height: 1.6;
+}
+
+.legales-box h1 {
+    color: #ffd700;
+    font-size: 32px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.legales-box .ultima-actualizacion {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 40px;
+}
+
+.legales-box section {
+    margin-bottom: 30px;
+}
+
+.legales-box h2 {
+    color: #fff;
+    font-size: 20px;
+    margin-bottom: 15px;
+    border-left: 4px solid #ffd700;
+    padding-left: 10px;
+}
+
+.legales-box p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.legales-box .divisor {
+    border: 0;
+    height: 1px;
+    background: #444;
+    margin: 40px 0;
+}

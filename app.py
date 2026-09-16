@@ -181,6 +181,10 @@ app.jinja_env.globals['get_carrito_count'] = get_carrito_count
 # -------------------------------------------------------
 # RUTAS PRINCIPALES
 # -------------------------------------------------------
+@app.route('/legales')
+def legales():
+    return render_template('legales.html')
+
 @app.route('/')
 def index():
     condicion_filtro = request.args.get('condicion')
