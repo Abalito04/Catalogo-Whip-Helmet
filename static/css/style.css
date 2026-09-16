@@ -2523,24 +2523,24 @@ footer a {
 }
 
 .legales-box {
-    background: #2a2a2a;
+    background: #ffffff;
     padding: 40px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    color: #ddd;
+    color: #333333;
     line-height: 1.6;
 }
 
 .legales-box h1 {
-    color: #ffd700;
+    color: #000000;
     font-size: 32px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     text-align: center;
 }
 
 .legales-box .ultima-actualizacion {
     text-align: center;
-    color: #888;
+    color: #666;
     font-size: 14px;
     margin-bottom: 40px;
 }
@@ -2550,16 +2550,25 @@ footer a {
 }
 
 .legales-box h2 {
-    color: #fff;
+    color: #111111;
     font-size: 20px;
     margin-bottom: 15px;
     border-left: 4px solid #ffd700;
     padding-left: 10px;
 }
 
-.legales-box p {
+.legales-box p, .legales-box ul {
     font-size: 16px;
     margin-bottom: 15px;
+    color: #444;
+}
+
+.legales-box ul {
+    padding-left: 20px;
+}
+
+.legales-box li {
+    margin-bottom: 5px;
 }
 
 .legales-box .divisor {
